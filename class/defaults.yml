@@ -2,6 +2,7 @@ parameters:
   control_api:
     =_metadata: {}
     namespace: appuio-control-api
+    zones: {}
 
     cluster_admin_impersonation:
       oidc_administrator_role: admin

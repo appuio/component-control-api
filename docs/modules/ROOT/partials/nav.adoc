@@ -1,2 +1,4 @@
 * xref:index.adoc[Home]
+
+.Technical Reference
 * xref:references/parameters.adoc[Parameters]

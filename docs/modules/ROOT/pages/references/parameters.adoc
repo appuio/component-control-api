@@ -10,6 +10,43 @@ default:: `appuio-control-api`
 
 The namespace in which to deploy this component.
 
+== `zones`
+
+[horizontal]
+type:: dict
+default:: `{}`
+
+This key deploys static APPUiO Zone definitions.
+Each subkey of `zones` results in the resource's `metadata.name` and contains an object that's an `appuio.io/v1/Zone` spec verbatim.
+
+.Zone configuration
+[example]
+====
+[source,yaml]
+----
+parameters:
+  control_api:
+    zones:
+      example-zone-1:
+        data:
+          displayName: Example Zone 1
+          features:
+            kubernetesVersion: ${dynamic_facts:kubernetesVersion:major}.${dynamic_facts:kubernetesVersion:minor}
+            sdnPlugin: OVN-Kubernetes
+          urls:
+            console: https://console.example.zone
+            kubernetesAPI: https://api.example.zone:6443
+          cname: cname.example.zone
+          defaultAppDomain: apps.example.zone
+          gatewayIPs:
+          - 100.100.100.100
+          cloudProvider:
+            name: example
+            zones:
+              - zone1
+            region: region1
+----
+====
 
 == `cluster_admin_impersonation.oidc_administrator_role`
 
@@ -18,11 +55,3 @@ type:: string
 default:: `admin`
 
 The name of the OpenID Connect role to allow administrator impersonation.
-
-
-== Example
-
-[source,yaml]
-----
-namespace: example-namespace
-----
