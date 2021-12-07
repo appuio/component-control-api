@@ -1,11 +1,11 @@
 :global:
   componentName: control-api
-  githubUrl: https://github.com/projectsyn/component-control-api
+  githubUrl: https://github.com/appuio/component-control-api
   feature_goldenTests: true
 
 docs/antora.yml:
   name: control-api
-  title: control-api
+  title: APPUiO Control API
 .github/workflows/test.yaml:
   test_makeTarget: test -e instance=${{ matrix.instance }}
   goldenTest_makeTarget: golden-diff -e instance=${{ matrix.instance }}

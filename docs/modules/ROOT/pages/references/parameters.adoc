@@ -6,7 +6,7 @@ The parent key for all of the following parameters is `control_api`.
 
 [horizontal]
 type:: string
-default:: `syn-control-api`
+default:: `appuio-control-api`
 
 The namespace in which to deploy this component.
 
