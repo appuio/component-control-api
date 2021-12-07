@@ -1,0 +1,4 @@
+parameters:
+  control_api:
+    =_metadata: {}
+    namespace: syn-control-api
