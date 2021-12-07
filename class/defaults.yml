@@ -6,3 +6,9 @@ parameters:
 
     cluster_admin_impersonation:
       oidc_administrator_role: admin
+
+    images:
+      control-api:
+        registry: ghcr.io
+        image: appuio/control-api
+        tag: v0.1.0
