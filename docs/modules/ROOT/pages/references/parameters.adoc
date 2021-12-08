@@ -11,6 +11,15 @@ default:: `appuio-control-api`
 The namespace in which to deploy this component.
 
 
+== `cluster_admin_impersonation.oidc_administrator_role`
+
+[horizontal]
+type:: string
+default:: `admin`
+
+The name of the OpenID Connect role to allow administrator impersonation.
+
+
 == Example
 
 [source,yaml]

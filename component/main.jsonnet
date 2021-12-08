@@ -7,4 +7,5 @@ local params = inv.parameters.control_api;
 
 // Define outputs below
 {
+  '10_rbac_cluster_admin_impersonation': (import 'rbac-cluster-admin-impersonation.libsonnet'),
 }
