@@ -1,0 +1,30 @@
+/**
+* \file zone.libjsonnet
+* \brief methods to create APPUiO resources for control API
+*/
+
+local com = import 'lib/commodore.libjsonnet';
+local kap = import 'lib/kapitan.libjsonnet';
+local kube = import 'lib/kube.libjsonnet';
+local inv = kap.inventory();
+
+{
+  /**
+  * \brief `Zone` creates a Zone definition that provides metadata about an APPUiO-enabled cluster.
+  *
+  * \arg `name` The metadata name of the resource.
+  *
+  * The return value of Zone shall be merged with custom data.
+  */
+  Zone(name): kube._Object('appuio.io/v1', 'Zone', name) {
+    data: {
+      displayName: name,
+      features: {},
+      urls: {},
+      cname: '',
+      defaultAppDomain: '',
+      gatewayIPs: [],
+      cloudProvider: {},
+    },
+  },
+}
