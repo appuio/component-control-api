@@ -1,5 +1,9 @@
 parameters:
   kapitan:
+    dependencies:
+      - type: https
+        source: https://github.com/appuio/control-api/releases/download/${control_api:images:control-api:tag}/crd.yaml
+        output_path: dependencies/control-api/crds/${control_api:images:control-api:tag}/01_crds.yaml
     compile:
       - input_paths:
           - control-api/component/app.jsonnet
@@ -9,3 +13,8 @@ parameters:
           - control-api/component/main.jsonnet
         input_type: jsonnet
         output_path: control-api/
+      - input_paths:
+          - control-api/crds/${control_api:images:control-api:tag}/
+        output_path: control-api/
+        input_type: copy
+        output_type: yaml
