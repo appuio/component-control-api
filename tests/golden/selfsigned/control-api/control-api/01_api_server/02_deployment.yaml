@@ -37,6 +37,5 @@ spec:
               name: apiserver-certs
       serviceAccountName: control-api
       volumes:
-        - name: apiserver-certs
-          secret:
-            secretName: control-api-tls
+        - emptyDir: {}
+          name: apiserver-certs

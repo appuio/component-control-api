@@ -7,6 +7,15 @@ parameters:
     cluster_admin_impersonation:
       oidc_administrator_role: admin
 
+    apiserver:
+      apiservice:
+        insecureSkipTLSVerify: false
+        caBundle: "?{vaultkv:${customer:name}/${cluster:name}/${_instance}/apiserver-cert}"
+      tls:
+        certSecretName: control-api-tls
+        serverCert: "?{vaultkv:${customer:name}/${cluster:name}/${_instance}/apiserver-cert}"
+        serverKey: "?{vaultkv:${customer:name}/${cluster:name}/${_instance}/apiserver-key}"
+
     images:
       control-api:
         registry: ghcr.io

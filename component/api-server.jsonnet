@@ -19,6 +19,28 @@ local serviceAccount = loadManifest('service_account.yaml') {
 
 local role = loadManifest('role.yaml');
 
+local certSecret =
+  if (
+    params.apiserver.tls.certSecretName != null
+    && params.apiserver.tls.certSecretName != ''
+    && params.apiserver.tls.serverCert != null
+    && params.apiserver.tls.serverCert != ''
+    && params.apiserver.tls.serverKey != null
+    && params.apiserver.tls.serverKey != ''
+  ) then
+    kube.Secret(params.apiserver.tls.certSecretName) {
+      metadata+: {
+        namespace: params.namespace,
+      },
+      stringData: {
+        'tls.key': params.apiserver.tls.serverKey,
+        'tls.crt': params.apiserver.tls.serverCert,
+      },
+    }
+  else
+    null;
+
+
 local deployment = loadManifest('deployment.yaml') {
   metadata+: {
     namespace: params.namespace,
@@ -36,10 +58,31 @@ local deployment = loadManifest('deployment.yaml') {
             c
           for c in super.containers
         ],
-      },
+      } + if certSecret != null then
+        {
+          volumes: [
+            {
+              name: 'apiserver-certs',
+              secret: {
+                secretName: certSecret.metadata.name,
+              },
+            },
+          ],
+        }
+      else {},
     },
   },
 };
+
+local service = loadManifest('service.yaml') {
+  metadata+: {
+    namespace: params.namespace,
+  },
+  spec+: {
+    selector: deployment.spec.selector.matchLabels,
+  },
+};
+
 
 {
   '01_role': role,
@@ -68,13 +111,14 @@ local deployment = loadManifest('deployment.yaml') {
   },
   '01_service_account': serviceAccount,
   '02_deployment': deployment,
-  '02_service': loadManifest('service.yaml') {
-    metadata+: {
-      namespace: params.namespace,
-    },
+  [if certSecret != null then '02_certs']: certSecret,
+  '02_service': service,
+  '02_apiservice': loadManifest('apiservice.yaml') {
     spec+: {
-      selector: deployment.spec.selector.matchLabels,
-    },
+      service: {
+        name: service.metadata.name,
+        namespace: service.metadata.namespace,
+      },
+    } + params.apiserver.apiservice,
   },
-  '02_apiservice': loadManifest('apiservice.yaml'),
 }

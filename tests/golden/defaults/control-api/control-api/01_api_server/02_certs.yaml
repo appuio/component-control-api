@@ -1,0 +1,13 @@
+apiVersion: v1
+data: {}
+kind: Secret
+metadata:
+  annotations: {}
+  labels:
+    name: control-api-tls
+  name: control-api-tls
+  namespace: appuio-control-api
+stringData:
+  tls.crt: t-silent-test-1234/c-green-test-1234/control-api/apiserver-cert
+  tls.key: t-silent-test-1234/c-green-test-1234/control-api/apiserver-key
+type: Opaque
