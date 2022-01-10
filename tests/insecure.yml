@@ -1,0 +1,27 @@
+parameters:
+  control_api:
+    apiserver:
+      apiservice:
+        insecureSkipTLSVerify: true
+      tls:
+        certSecretName: null
+
+    zones:
+      example-zone-1:
+        data:
+          displayName: Example Zone 1
+          features:
+            kubernetesVersion: "1.22"
+            sdnPlugin: OVN-Kubernetes
+          urls:
+            console: https://console.example.zone
+            kubernetesAPI: https://api.example.zone:6443
+          cname: cname.example.zone
+          defaultAppDomain: apps.example.zone
+          gatewayIPs:
+            - 100.100.100.100
+          cloudProvider:
+            name: example
+            zones:
+              - zone1
+            region: region1

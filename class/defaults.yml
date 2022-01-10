@@ -1,14 +1,24 @@
 parameters:
   control_api:
     =_metadata: {}
+
     namespace: appuio-control-api
+
     zones: {}
 
     cluster_admin_impersonation:
       oidc_administrator_role: admin
 
+    apiserver:
+      apiservice:
+        insecureSkipTLSVerify: false
+      tls:
+        certSecretName: control-api-tls
+        serverCert: ""
+        serverKey: "?{vaultkv:${customer:name}/${cluster:name}/${_instance}/apiserver-key}"
+
     images:
       control-api:
         registry: ghcr.io
         image: appuio/control-api
-        tag: v0.1.0
+        tag: v0.2.1

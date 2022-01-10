@@ -4,6 +4,27 @@ parameters:
       - type: https
         source: https://github.com/appuio/control-api/releases/download/${control_api:images:control-api:tag}/crd.yaml
         output_path: dependencies/control-api/crds/${control_api:images:control-api:tag}/01_crds.yaml
+      - type: https
+        source: https://raw.githubusercontent.com/appuio/control-api/${control_api:images:control-api:tag}/config/rbac/role.yaml
+        output_path: dependencies/control-api/manifests/${control_api:images:control-api:tag}/role.yaml
+      - type: https
+        source: https://raw.githubusercontent.com/appuio/control-api/${control_api:images:control-api:tag}/config/rbac/role_binding.yaml
+        output_path: dependencies/control-api/manifests/${control_api:images:control-api:tag}/role_binding.yaml
+      - type: https
+        source: https://raw.githubusercontent.com/appuio/control-api/${control_api:images:control-api:tag}/config/rbac/role_binding_auth_delegator.yaml
+        output_path: dependencies/control-api/manifests/${control_api:images:control-api:tag}/role_binding_auth_delegator.yaml
+      - type: https
+        source: https://raw.githubusercontent.com/appuio/control-api/${control_api:images:control-api:tag}/config/rbac/service_account.yaml
+        output_path: dependencies/control-api/manifests/${control_api:images:control-api:tag}/service_account.yaml
+      - type: https
+        source: https://raw.githubusercontent.com/appuio/control-api/${control_api:images:control-api:tag}/config/deployment/deployment.yaml
+        output_path: dependencies/control-api/manifests/${control_api:images:control-api:tag}/deployment.yaml
+      - type: https
+        source: https://raw.githubusercontent.com/appuio/control-api/${control_api:images:control-api:tag}/config/deployment/service.yaml
+        output_path: dependencies/control-api/manifests/${control_api:images:control-api:tag}/service.yaml
+      - type: https
+        source: https://raw.githubusercontent.com/appuio/control-api/${control_api:images:control-api:tag}/config/deployment/apiservice.yaml
+        output_path: dependencies/control-api/manifests/${control_api:images:control-api:tag}/apiservice.yaml
     compile:
       - input_paths:
           - control-api/component/app.jsonnet
@@ -13,6 +34,11 @@ parameters:
           - control-api/component/main.jsonnet
         input_type: jsonnet
         output_path: control-api/
+      - input_paths:
+          - control-api/component/api-server.jsonnet
+        input_type: jsonnet
+        output_path: control-api/01_api_server/
+
       - input_paths:
           - control-api/crds/${control_api:images:control-api:tag}/
         output_path: control-api/

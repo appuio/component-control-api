@@ -7,6 +7,7 @@ local inv = kap.inventory();
 // The hiera parameters for the component
 local params = inv.parameters.control_api;
 
+
 local zones = [
   controlApi.Zone(name) + params.zones[name] {
     metadata+: {
@@ -19,6 +20,7 @@ local zones = [
 
 // Define outputs below
 {
+  '00_namespace': kube.Namespace(params.namespace),
   '10_rbac_cluster_admin_impersonation': (import 'rbac-cluster-admin-impersonation.libsonnet'),
   [if std.length(zones) > 0 then '20_zones']: zones,
 }
