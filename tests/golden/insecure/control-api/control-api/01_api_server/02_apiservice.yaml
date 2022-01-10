@@ -3,7 +3,6 @@ kind: APIService
 metadata:
   name: v1.organization.appuio.io
 spec:
-  caBundle: ''
   group: organization.appuio.io
   groupPriorityMinimum: 1000
   insecureSkipTLSVerify: true

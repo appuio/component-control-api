@@ -115,10 +115,21 @@ local service = loadManifest('service.yaml') {
   '02_service': service,
   '02_apiservice': loadManifest('apiservice.yaml') {
     spec+: {
-      service: {
-        name: service.metadata.name,
-        namespace: service.metadata.namespace,
-      },
-    } + params.apiserver.apiservice,
+             service: {
+               name: service.metadata.name,
+               namespace: service.metadata.namespace,
+             },
+           }
+           +
+           (
+             if params.apiserver.tls.serverCert != null
+                && params.apiserver.tls.serverCert != ''
+             then
+               { caBundle: std.base64(params.apiserver.tls.serverCert) }
+             else
+               {}
+           )
+           +
+           params.apiserver.apiservice,
   },
 }

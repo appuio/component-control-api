@@ -1,7 +1,9 @@
 parameters:
   control_api:
     =_metadata: {}
+
     namespace: appuio-control-api
+
     zones: {}
 
     cluster_admin_impersonation:
@@ -10,10 +12,9 @@ parameters:
     apiserver:
       apiservice:
         insecureSkipTLSVerify: false
-        caBundle: "?{vaultkv:${customer:name}/${cluster:name}/${_instance}/apiserver-cert}"
       tls:
         certSecretName: control-api-tls
-        serverCert: "?{vaultkv:${customer:name}/${cluster:name}/${_instance}/apiserver-cert}"
+        serverCert: ""
         serverKey: "?{vaultkv:${customer:name}/${cluster:name}/${_instance}/apiserver-key}"
 
     images:

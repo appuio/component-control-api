@@ -3,9 +3,6 @@ parameters:
     apiserver:
       apiservice:
         insecureSkipTLSVerify: true
-        caBundle: ""
-      tls:
-        certSecretName: null
 
     zones:
       example-zone-1:
