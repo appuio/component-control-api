@@ -21,4 +21,4 @@ parameters:
       control-api:
         registry: ghcr.io
         image: appuio/control-api
-        tag: v0.2.0
+        tag: v0.2.1
