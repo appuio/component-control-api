@@ -31,7 +31,7 @@ default:: `control-api-tls`
 
 === `apiserver.tls.serverCert`
 type:: string
-default:: "?{vaultkv:${customer:name}/${cluster:name}/${_instance}/apiserver-cert}"
+default:: ""
 
 === `apiserver.tls.serverKey`
 type:: string
