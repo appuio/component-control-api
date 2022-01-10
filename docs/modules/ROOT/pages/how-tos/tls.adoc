@@ -1,0 +1,58 @@
+= Setup a TLS certificate for the Control-API
+
+This guide provides an example how to setup a TLS certificate for the Control-API.
+This ensures encrypted and trusted communication between the Kubernetes API server and the aggregate API server provided by the Control-API.
+
+====
+Requirements
+
+* `kubectl`
+* `openssl`
+* `vault`
+* `yq`
+====
+
+. Compile the to be configured cluster
++
+[source,bash]
+----
+commodore catalog compile ${CLUSTER_ID}"
+----
+
+. Prepare certificate files
++
+[source,bash]
+----
+# Adjust the lifetime as necessary
+lifetime=3650
+# Adjust servicename if the namespace differs
+servicename=apiserver.appuio-control-api.svc
+openssl req -x509 -newkey rsa:4096 -nodes -keyout apiserver.key -out apiserver.crt -days ${lifetime} -subj '/CN=${servicename}' -addext 'subjectAltName = DNS:${servicename}'
+----
+
+. Store key in Vault
++
+[source,bash]
+----
+instance=control-api
+parent="clusters/kv/${TENANT_ID}/${CLUSTER_ID}"
+
+# Use the 'patch' subcommand to add to existing secret
+vault kv patch "${parent}/${instance}" apiserver-cert=@apiserver.crt
+----
+
+. Add certificate to cluster config
++
+[source,bash]
+----
+apicert=$(cat apiserver.crt)
+yq eval -i ".parameter.control_api.apiserver.tls.serverCert = \"${apicert}\"" \
+  inventory/classes/${TENANT_ID}/${CLUSTER_ID}.yml
+----
+
+. Remove temporary files
++
+[source,bash]
+----
+rm apiserver.{key,crt}
+----
