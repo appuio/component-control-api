@@ -20,14 +20,9 @@ local serviceAccount = loadManifest('service_account.yaml') {
 local role = loadManifest('role.yaml');
 
 local certSecret =
-  if (
-    params.apiserver.tls.certSecretName != null
-    && params.apiserver.tls.certSecretName != ''
-    && params.apiserver.tls.serverCert != null
-    && params.apiserver.tls.serverCert != ''
-    && params.apiserver.tls.serverKey != null
-    && params.apiserver.tls.serverKey != ''
-  ) then
+  if params.apiserver.tls.certSecretName != null then
+    assert std.length(params.apiserver.tls.serverCert) > 0 : 'apiserver.tls.serverCert is required';
+    assert std.length(params.apiserver.tls.serverKey) > 0 : 'apiserver.tls.serverKey is required';
     kube.Secret(params.apiserver.tls.certSecretName) {
       metadata+: {
         namespace: params.namespace,
@@ -52,7 +47,7 @@ local deployment = loadManifest('deployment.yaml') {
         containers: [
           if c.name == 'apiserver' then
             c {
-              image: '%s/%s:%s' % [ image.registry, image.image, image.tag ],
+              image: '%(registry)s/%(image)s:%(tag)s' % image,
             }
           else
             c

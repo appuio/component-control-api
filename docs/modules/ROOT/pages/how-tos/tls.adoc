@@ -12,7 +12,7 @@ Requirements
 * `yq`
 ====
 
-. Compile the to be configured cluster
+. Compile the cluster
 +
 [source,bash]
 ----
@@ -50,9 +50,21 @@ yq eval -i ".parameter.control_api.apiserver.tls.serverCert = \"${apicert}\"" \
   inventory/classes/${TENANT_ID}/${CLUSTER_ID}.yml
 ----
 
+. Commit and push configuration change
++
+[source,bash]
+----
+cd inventory/classes/${TENANT_ID}
+git add ${CLUSTER_ID}.yml
+git commit -m "Configure Control API APIService certificate"
+git push origin master
+popd
+----
+
 . Remove temporary files
 +
 [source,bash]
 ----
 rm apiserver.{key,crt}
 ----
+

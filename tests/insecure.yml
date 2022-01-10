@@ -3,6 +3,8 @@ parameters:
     apiserver:
       apiservice:
         insecureSkipTLSVerify: true
+      tls:
+        certSecretName: null
 
     zones:
       example-zone-1:

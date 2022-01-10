@@ -13,21 +13,21 @@ The namespace in which to deploy this component.
 == `apiserver.apiservice`
 type:: dict
 
-This key is applied directly as a `APIService` object.
+This key is applied directly as an `APIService` object.
 The `APIService` object instructs the Kubernetes API server to delegate requests to the aggregate API server.
 
 == `apiserver.tls`
 
-This key configures encryption of internal traffic, meaning from the Kubernetes API server to our aggregate API sever.
+This key configures encryption of internal traffic from the Kubernetes API server to the aggregate API sever.
 
 You have the option to provide a custom TLS key and certificate.
-
-If any of the following fields are set to `null` or empty string, the aggregate API server will generate its own certificates.
-In that case the connection is still encrypted, but you need to disable TLS verification by setting `insecureSkipTLSVerify` to `true` in the APIService.
 
 === `apiserver.tls.certSecretName`
 type:: string
 default:: `control-api-tls`
+
+If this field is set to `null`, the aggregate API server will generate its own certificates.
+In that case the connection is still encrypted, but you need to disable TLS verification by setting `insecureSkipTLSVerify` to `true` in the APIService.
 
 === `apiserver.tls.serverCert`
 type:: string
