@@ -4,6 +4,8 @@ parameters:
 
     namespace: appuio-control-api
 
+    appSpec: {}
+
     zones: {}
 
     cluster_admin_impersonation:
