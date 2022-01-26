@@ -48,7 +48,12 @@ local deployment = loadManifest('deployment.yaml') {
           if c.name == 'apiserver' then
             c {
               image: '%(registry)s/%(image)s:%(tag)s' % image,
-            }
+            } + if certSecret != null then {
+              args+: [
+                '--tls-cert-file=/apiserver.local.config/certificates/tls.crt',
+                '--tls-private-key-file=/apiserver.local.config/certificates/tls.key',
+              ],
+            } else {}
           else
             c
           for c in super.containers
