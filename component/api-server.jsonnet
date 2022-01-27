@@ -35,6 +35,21 @@ local certSecret =
   else
     null;
 
+local mergeArgs(args, additional) = std.set(args + additional, function(arg) std.split(arg, '=')[0]);
+local extraDeploymentArgs =
+  [
+    '--cluster-roles=' + std.join(',', std.objectFields(params.organization_roles)),
+    '--username-prefix=' + params.username_prefix,
+  ] +
+  if certSecret != null then
+    [
+      '--tls-cert-file=/apiserver.local.config/certificates/tls.crt',
+      '--tls-private-key-file=/apiserver.local.config/certificates/tls.key',
+    ]
+  else
+    []
+;
+
 
 local deployment = loadManifest('deployment.yaml') {
   metadata+: {
@@ -48,12 +63,8 @@ local deployment = loadManifest('deployment.yaml') {
           if c.name == 'apiserver' then
             c {
               image: '%(registry)s/%(image)s:%(tag)s' % image,
-            } + if certSecret != null then {
-              args+: [
-                '--tls-cert-file=/apiserver.local.config/certificates/tls.crt',
-                '--tls-private-key-file=/apiserver.local.config/certificates/tls.key',
-              ],
-            } else {}
+              args: mergeArgs(super.args, extraDeploymentArgs),
+            }
           else
             c
           for c in super.containers

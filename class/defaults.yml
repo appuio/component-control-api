@@ -9,6 +9,41 @@ parameters:
     cluster_admin_impersonation:
       oidc_administrator_role: admin
 
+    basic_user_role:
+      - apiGroups: ["organization.appuio.io"]
+        resources: ["organizations"]
+        verbs: ["get", "watch", "list", "patch", "edit", "create"]
+      - apiGroups: ["rbac.appuio.io"]
+        resources: ["organizations"]
+        verbs: ["watch", "list", "create"]
+      - apiGroups: ["appuio.io"]
+        resources: ["zones"]
+        verbs: ["get", "watch", "list"]
+
+    organization_roles:
+      control-api:organization-viewer:
+        - apiGroups: ["rbac.appuio.io"]
+          resources: ["organizations"]
+          verbs: ["get", "watch", "list"]
+        - apiGroups: ["appuio.io"]
+          resources: ["organizationmembers"]
+          verbs: ["get", "watch", "list"]
+        - apiGroups: ["rbac.authorization.k8s.io"]
+          resources: ["rolebindings"]
+          verbs: ["get", "watch", "list"]
+      control-api:organization-admin:
+        - apiGroups: ["rbac.appuio.io"]
+          resources: ["organizations"]
+          verbs: ["get", "watch", "list", "patch", "edit", "create"]
+        - apiGroups: ["appuio.io"]
+          resources: ["organizationmembers"]
+          verbs: ["get", "watch", "list", "patch", "edit", "create"]
+        - apiGroups: ["rbac.authorization.k8s.io"]
+          resources: ["rolebindings"]
+          verbs: ["get", "watch", "list", "patch", "edit", "create", "delete"]
+
+    username_prefix: "appuio#"
+
     apiserver:
       apiservice:
         insecureSkipTLSVerify: false
@@ -21,4 +56,4 @@ parameters:
       control-api:
         registry: ghcr.io
         image: appuio/control-api
-        tag: v0.2.1
+        tag: v0.3.2
