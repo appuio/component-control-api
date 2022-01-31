@@ -29,6 +29,17 @@ rules:
       - patch
       - edit
       - create
+  - apiGroups:
+      - rbac.authorization.k8s.io
+    resources:
+      - rolebindings
+    verbs:
+      - get
+      - watch
+      - list
+      - patch
+      - edit
+      - create
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
