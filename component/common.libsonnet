@@ -9,6 +9,11 @@ local defaultLabels = {
   'app.kubernetes.io/managed-by': 'commodore',
 };
 
+
+local image = params.images['control-api'];
+local loadManifest(manifest) = std.parseJson(kap.yaml_load('control-api/manifests/' + image.tag + '/' + manifest));
+
 {
   DefaultLabels: defaultLabels,
+  LoadManifest: loadManifest,
 }

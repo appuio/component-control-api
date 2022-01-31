@@ -7,13 +7,17 @@ local kube = import 'lib/kube.libjsonnet';
 local inv = kap.inventory();
 local params = inv.parameters.control_api;
 
-[
-  kube.ClusterRole(role) {
-    metadata+: {
-      labels+: common.DefaultLabels,
-    },
-    rules: params.organization_roles[role],
-  }
 
-  for role in std.objectFields(params.organization_roles)
-]
+local adminrole = common.LoadManifest('rbac/organization-admin-role.yaml') {
+  metadata+: {
+    labels+: common.DefaultLabels,
+  },
+};
+
+local viewrole = common.LoadManifest('rbac/organization-viewer-role.yaml') {
+  metadata+: {
+    labels+: common.DefaultLabels,
+  },
+};
+
+[ adminrole, viewrole ]
