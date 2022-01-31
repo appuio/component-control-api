@@ -22,5 +22,7 @@ local zones = [
 {
   '00_namespace': kube.Namespace(params.namespace),
   '10_rbac_cluster_admin_impersonation': (import 'rbac-cluster-admin-impersonation.libsonnet'),
+  '10_rbac_basic_user': (import 'rbac-basic-user.libsonnet'),
+  '10_rbac_organization': (import 'rbac-organization.libsonnet'),
   [if std.length(zones) > 0 then '20_zones']: zones,
 }

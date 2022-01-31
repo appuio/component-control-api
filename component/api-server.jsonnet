@@ -7,17 +7,13 @@ local kube = import 'lib/kube.libjsonnet';
 local inv = kap.inventory();
 local params = inv.parameters.control_api;
 
-local image = params.images['control-api'];
-
-local loadManifest(manifest) = std.parseJson(kap.yaml_load('control-api/manifests/' + image.tag + '/' + manifest));
-
-local serviceAccount = loadManifest('service_account.yaml') {
+local serviceAccount = common.LoadManifest('apiserver/service_account.yaml') {
   metadata+: {
     namespace: params.namespace,
   },
 };
 
-local role = loadManifest('role.yaml');
+local role = common.LoadManifest('apiserver/role.yaml');
 
 local certSecret =
   if params.apiserver.tls.certSecretName != null then
@@ -35,8 +31,22 @@ local certSecret =
   else
     null;
 
+local mergeArgs(args, additional) = std.set(args + additional, function(arg) std.split(arg, '=')[0]);
+local extraDeploymentArgs =
+  [
+    '--username-prefix=' + params.username_prefix,
+  ] +
+  if certSecret != null then
+    [
+      '--tls-cert-file=/apiserver.local.config/certificates/tls.crt',
+      '--tls-private-key-file=/apiserver.local.config/certificates/tls.key',
+    ]
+  else
+    []
+;
 
-local deployment = loadManifest('deployment.yaml') {
+
+local deployment = common.LoadManifest('apiserver/deployment.yaml') {
   metadata+: {
     namespace: params.namespace,
   },
@@ -47,13 +57,9 @@ local deployment = loadManifest('deployment.yaml') {
         containers: [
           if c.name == 'apiserver' then
             c {
-              image: '%(registry)s/%(image)s:%(tag)s' % image,
-            } + if certSecret != null then {
-              args+: [
-                '--tls-cert-file=/apiserver.local.config/certificates/tls.crt',
-                '--tls-private-key-file=/apiserver.local.config/certificates/tls.key',
-              ],
-            } else {}
+              image: '%(registry)s/%(image)s:%(tag)s' % params.images['control-api'],
+              args: mergeArgs(super.args, extraDeploymentArgs),
+            }
           else
             c
           for c in super.containers
@@ -74,7 +80,7 @@ local deployment = loadManifest('deployment.yaml') {
   },
 };
 
-local service = loadManifest('service.yaml') {
+local service = common.LoadManifest('apiserver/service.yaml') {
   metadata+: {
     namespace: params.namespace,
   },
@@ -100,7 +106,7 @@ local service = loadManifest('service.yaml') {
       },
     ],
   },
-  '01_role_binding_auth_delegator': loadManifest('role_binding_auth_delegator.yaml') {
+  '01_role_binding_auth_delegator': common.LoadManifest('apiserver/role_binding_auth_delegator.yaml') {
     subjects: [
       {
         kind: 'ServiceAccount',
@@ -113,7 +119,7 @@ local service = loadManifest('service.yaml') {
   '02_deployment': deployment,
   [if certSecret != null then '02_certs']: certSecret,
   '02_service': service,
-  '02_apiservice': loadManifest('apiservice.yaml') {
+  '02_apiservice': common.LoadManifest('apiserver/apiservice.yaml') {
     spec+: {
              service: {
                name: service.metadata.name,

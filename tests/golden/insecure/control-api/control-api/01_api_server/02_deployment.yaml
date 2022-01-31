@@ -18,9 +18,11 @@ spec:
       containers:
         - args:
             - --cert-dir=/apiserver.local.config/certificates
-            - --secure-port=9443
+            - --cluster-roles=control-api:organization-viewer,control-api:organization-admin
             - --feature-gates=APIPriorityAndFairness=false
-          image: ghcr.io/appuio/control-api:v0.2.1
+            - --secure-port=9443
+            - --username-prefix=appuio#
+          image: ghcr.io/appuio/control-api:v0.3.4
           imagePullPolicy: IfNotPresent
           name: apiserver
           ports:
