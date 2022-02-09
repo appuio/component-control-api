@@ -24,18 +24,17 @@ spec:
             - --tls-cert-file=/apiserver.local.config/certificates/tls.crt
             - --tls-private-key-file=/apiserver.local.config/certificates/tls.key
             - --username-prefix=appuio#
-          image: ghcr.io/appuio/control-api:v0.3.4
-          imagePullPolicy: IfNotPresent
+          image: ghcr.io/appuio/control-api:v0.4.0
           name: apiserver
           ports:
             - containerPort: 9443
           resources:
             limits:
-              cpu: 100m
-              memory: 30Mi
+              cpu: 300m
+              memory: 200Mi
             requests:
               cpu: 100m
-              memory: 20Mi
+              memory: 100Mi
           volumeMounts:
             - mountPath: /apiserver.local.config/certificates
               name: apiserver-certs
