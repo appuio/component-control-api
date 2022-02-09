@@ -16,7 +16,7 @@ rules:
       - watch
       - list
       - patch
-      - edit
+      - update
       - create
   - apiGroups:
       - rbac.appuio.io
