@@ -10,6 +10,15 @@ default:: `appuio-control-api`
 
 The namespace in which to deploy this component.
 
+== `images`
+
+[horizontal]
+type:: dictionary
+default:: https://github.com/appuio/component-control-api/blob/master/class/defaults.yml[See `class/defaults.yml`]
+
+Dictionary containing the container images used by this component.
+
+
 == `apiserver.apiservice`
 type:: dict
 
@@ -82,3 +91,73 @@ type:: string
 default:: `admin`
 
 The name of the OpenID Connect role to allow administrator impersonation.
+
+
+== `idp_adapter.enabled`
+
+[horizontal]
+type:: boolean
+default:: `false`
+
+Controls if the IDP Adapter should be deployed.
+
+
+== `idp_adapter.args`
+
+[horizontal]
+type:: list
+default:: `[]`
+
+Arguments that should be passed to the IDP Adapter.
+
+
+== `idp_adapter.env`
+
+[horizontal]
+type:: list
+default:: `{}`
+example::
++
+[source,yaml]
+----
+idp_adapter:
+  env:
+    KEYCLOAK_PASSWORD:
+      secretKeyRef:
+        name: keycloak-user
+        key: password
+    DEBUG: "true"
+----
+
+Additional environment that should be passed to the IDP Adapter.
+If a dict is given `valueFrom:` is assumed.
+
+
+== `idp_adapter.resources`
+
+[horizontal]
+type:: dict
+default:: https://github.com/appuio/component-control-api/blob/master/class/defaults.yml[See `class/defaults.yml`]
+
+Resource requests and limits to apply to the IDP Adapter container.
+
+
+== `secrets`
+
+[horizontal]
+type:: dictionary
+default:: `{}`
+example::
++
+[source,yaml]
+----
+secrets:
+  keycloak-user:
+    stringData:
+      username: keycloak-user
+      password: keycloak-password
+----
+
+A key-value map defining multiple `Secret` for referencing in `secrets`.
+Each entry will generate a `Secret` with the key as its name.
+

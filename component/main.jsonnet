@@ -24,5 +24,6 @@ local zones = [
   '10_rbac_cluster_admin_impersonation': (import 'rbac-cluster-admin-impersonation.libsonnet'),
   '10_rbac_basic_user': (import 'rbac-basic-user.libsonnet'),
   '10_rbac_organization': (import 'rbac-organization.libsonnet'),
+  [if params.idp_adapter.enabled then '30_idp_adapter']: (import 'idp-adapter.libsonnet'),
   [if std.length(zones) > 0 then '20_zones']: zones,
 }

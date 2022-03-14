@@ -55,3 +55,19 @@ parameters:
             zones:
               - zone1
             region: region1
+
+    idp_adapter:
+      enabled: true
+      args:
+        - -keycloak-password=$(KEYCLOAK_PASSWORD)
+      env:
+        KEYCLOAK_PASSWORD:
+          secretKeyRef:
+            name: keycloak-user
+            key: password
+
+    secrets:
+      keycloak-credentials:
+        stringData:
+          username: kc-user
+          password: kc-user
