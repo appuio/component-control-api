@@ -39,6 +39,11 @@ parameters:
       - type: https
         source: https://raw.githubusercontent.com/appuio/control-api/${control_api:images:control-api:tag}/config/user-rbac/organization-viewer-role.yml
         output_path: dependencies/control-api/manifests/${control_api:images:control-api:tag}/rbac/organization-viewer-role.yaml
+
+      - type: https
+        source: https://raw.githubusercontent.com/${control_api:images:idp-adapter:image}/${control_api:images:idp-adapter:tag}/config/rbac/role.yaml
+        output_path: dependencies/control-api/manifests/idp-adapter/${control_api:images:idp-adapter:image}/${control_api:images:idp-adapter:tag}/rbac/clusterrole.yaml
+
     compile:
       - input_paths:
           - control-api/component/app.jsonnet

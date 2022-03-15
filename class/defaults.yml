@@ -19,8 +19,27 @@ parameters:
         serverCert: ""
         serverKey: "?{vaultkv:${customer:name}/${cluster:name}/${_instance}/apiserver-key}"
 
+    idp_adapter:
+      enabled: false
+      args: []
+      env: {}
+      resources:
+        requests:
+          cpu: '100m'
+          memory: '128Mi'
+        limits:
+          cpu: '200m'
+          memory: '256Mi'
+
+    secrets: {}
+
     images:
       control-api:
         registry: ghcr.io
         image: appuio/control-api
         tag: v0.5.3
+
+      idp-adapter:
+        registry: ghcr.io
+        image: vshn/appuio-keycloak-adapter
+        tag: v0.4.2
