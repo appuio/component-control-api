@@ -80,6 +80,25 @@ rules:
       - patch
       - update
   - apiGroups:
+      - appuio.io
+    resources:
+      - users
+    verbs:
+      - create
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - appuio.io
+    resources:
+      - users/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
       - organization.appuio.io
       - rbac.appuio.io
     resources:
@@ -247,7 +266,7 @@ spec:
                 secretKeyRef:
                   key: password
                   name: keycloak-user
-          image: ghcr.io/vshn/appuio-keycloak-adapter:v0.4.2
+          image: ghcr.io/vshn/appuio-keycloak-adapter:v0.5.0
           imagePullPolicy: IfNotPresent
           name: controller
           ports: []
