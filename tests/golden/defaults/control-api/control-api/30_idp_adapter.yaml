@@ -132,11 +132,7 @@ rules:
       - rolebindings
       - subjects
     verbs:
-      - create
-      - get
-      - list
-      - patch
-      - update
+      - '*'
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -266,7 +262,7 @@ spec:
                 secretKeyRef:
                   key: password
                   name: keycloak-user
-          image: ghcr.io/vshn/appuio-keycloak-adapter:v0.5.0
+          image: ghcr.io/vshn/appuio-keycloak-adapter:v0.5.1
           imagePullPolicy: IfNotPresent
           name: controller
           ports: []
