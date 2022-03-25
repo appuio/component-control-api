@@ -8,13 +8,13 @@ local inv = kap.inventory();
 local params = inv.parameters.control_api;
 
 
-local adminrole = common.LoadManifest('rbac/organization-admin-role.yaml') {
+local adminrole = common.LoadManifest('user-rbac/organization-admin-role.yml') {
   metadata+: {
     labels+: common.DefaultLabels,
   },
 };
 
-local viewrole = common.LoadManifest('rbac/organization-viewer-role.yaml') {
+local viewrole = common.LoadManifest('user-rbac/organization-viewer-role.yml') {
   metadata+: {
     labels+: common.DefaultLabels,
   },
