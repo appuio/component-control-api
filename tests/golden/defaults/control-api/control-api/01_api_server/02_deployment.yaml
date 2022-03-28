@@ -17,6 +17,7 @@ spec:
     spec:
       containers:
         - args:
+            - api
             - --cert-dir=/apiserver.local.config/certificates
             - --cluster-roles=control-api:organization-viewer,control-api:organization-admin
             - --feature-gates=APIPriorityAndFairness=false
@@ -24,7 +25,6 @@ spec:
             - --tls-cert-file=/apiserver.local.config/certificates/tls.crt
             - --tls-private-key-file=/apiserver.local.config/certificates/tls.key
             - --username-prefix=appuio#
-            - api
           image: ghcr.io/appuio/control-api:v0.6.0
           name: apiserver
           ports:

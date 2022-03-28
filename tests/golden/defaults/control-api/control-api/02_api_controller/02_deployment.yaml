@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: control-api-controller
+  name: control-api-controller
+  namespace: appuio-control-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: control-api-controller
+  template:
+    metadata:
+      labels:
+        app: control-api-controller
+    spec:
+      containers:
+        - args:
+            - controller
+            - --username-prefix=appuio#
+          image: ghcr.io/appuio/control-api:v0.6.0
+          name: controller
+          ports:
+            - containerPort: 9443
+          resources:
+            limits:
+              cpu: 300m
+              memory: 200Mi
+            requests:
+              cpu: 100m
+              memory: 100Mi
+      serviceAccountName: control-api-controller

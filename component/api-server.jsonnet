@@ -58,7 +58,7 @@ local deployment = common.LoadManifest('deployment/apiserver/deployment.yaml') {
           if c.name == 'apiserver' then
             c {
               image: '%(registry)s/%(image)s:%(tag)s' % params.images['control-api'],
-              args: mergeArgs(super.args, extraDeploymentArgs),
+              args: [ super.args[0] ] + mergeArgs(super.args[1:], extraDeploymentArgs),
             }
           else
             c

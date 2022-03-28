@@ -17,12 +17,12 @@ spec:
     spec:
       containers:
         - args:
+            - api
             - --cert-dir=/apiserver.local.config/certificates
             - --cluster-roles=control-api:organization-viewer,control-api:organization-admin
             - --feature-gates=APIPriorityAndFairness=false
             - --secure-port=9443
             - --username-prefix=appuio#
-            - api
           image: ghcr.io/appuio/control-api:v0.6.0
           name: apiserver
           ports:
