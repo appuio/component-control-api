@@ -1,6 +1,8 @@
 parameters:
   control_api:
     apiserver:
+      extraArgs:
+        - --cluster-roles=control-api:organization-viewer,control-api:organization-admin,control-api:organization-test
       tls:
         serverCert: |-
           -----BEGIN CERTIFICATE-----
@@ -35,6 +37,9 @@ parameters:
           6Pt7VC4M/9kv/2GvdtKVzbiRjw==
           -----END CERTIFICATE-----
 
+    controller:
+      extraArgs:
+        - --member-roles=admin
 
     zones:
       example-zone-1:

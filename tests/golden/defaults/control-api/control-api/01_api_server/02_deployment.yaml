@@ -2,29 +2,30 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: control-api
-  name: control-api
+    app: control-api-apiserver
+  name: control-api-apiserver
   namespace: appuio-control-api
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: control-api
+      app: control-api-apiserver
   template:
     metadata:
       labels:
-        app: control-api
+        app: control-api-apiserver
     spec:
       containers:
         - args:
+            - api
             - --cert-dir=/apiserver.local.config/certificates
-            - --cluster-roles=control-api:organization-viewer,control-api:organization-admin
+            - --cluster-roles=control-api:organization-viewer,control-api:organization-admin,control-api:organization-test
             - --feature-gates=APIPriorityAndFairness=false
             - --secure-port=9443
             - --tls-cert-file=/apiserver.local.config/certificates/tls.crt
             - --tls-private-key-file=/apiserver.local.config/certificates/tls.key
             - --username-prefix=appuio#
-          image: ghcr.io/appuio/control-api:v0.5.3
+          image: ghcr.io/appuio/control-api:v0.6.0
           name: apiserver
           ports:
             - containerPort: 9443
@@ -38,7 +39,7 @@ spec:
           volumeMounts:
             - mountPath: /apiserver.local.config/certificates
               name: apiserver-certs
-      serviceAccountName: control-api
+      serviceAccountName: control-api-apiserver
       volumes:
         - name: apiserver-certs
           secret:

@@ -28,6 +28,10 @@ parameters:
           - control-api/component/api-server.jsonnet
         input_type: jsonnet
         output_path: control-api/01_api_server/
+      - input_paths:
+          - control-api/component/api-controller.jsonnet
+        input_type: jsonnet
+        output_path: control-api/02_api_controller/
 
       - input_paths:
           - control-api/crds/${control_api:images:control-api:tag}/
