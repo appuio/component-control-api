@@ -31,7 +31,6 @@ local certSecret =
   else
     null;
 
-local mergeArgs(args, additional) = std.set(args + additional, function(arg) std.split(arg, '=')[0]);
 local extraDeploymentArgs =
   [
     '--username-prefix=' + params.username_prefix,
@@ -58,7 +57,7 @@ local deployment = common.LoadManifest('deployment/apiserver/deployment.yaml') {
           if c.name == 'apiserver' then
             c {
               image: '%(registry)s/%(image)s:%(tag)s' % params.images['control-api'],
-              args: [ super.args[0] ] + mergeArgs(super.args[1:], extraDeploymentArgs),
+              args: [ super.args[0] ] + common.MergeArgs(common.MergeArgs(super.args[1:], extraDeploymentArgs), params.apiserver.extraArgs),
             }
           else
             c

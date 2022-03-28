@@ -17,7 +17,6 @@ local serviceAccount = common.LoadManifest('rbac/controller/service_account.yaml
 local role = com.namespaced(params.namespace, common.LoadManifest('rbac/controller/role.yaml'));
 local leaderElectionRole = com.namespaced(params.namespace, common.LoadManifest('rbac/controller/leader_election_role.yaml'));
 
-local mergeArgs(args, additional) = std.set(args + additional, function(arg) std.split(arg, '=')[0]);
 local extraDeploymentArgs =
   [
     '--username-prefix=' + params.username_prefix,
@@ -36,7 +35,7 @@ local deployment = common.LoadManifest('deployment/controller/deployment.yaml') 
           if c.name == 'controller' then
             c {
               image: '%(registry)s/%(image)s:%(tag)s' % params.images['control-api'],
-              args: [ super.args[0] ] + mergeArgs(super.args[1:], extraDeploymentArgs),
+              args: [ super.args[0] ] + common.MergeArgs(common.MergeArgs(super.args[1:], extraDeploymentArgs), params.controller.extraArgs),
             }
           else
             c

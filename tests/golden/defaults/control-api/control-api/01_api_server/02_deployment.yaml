@@ -19,7 +19,7 @@ spec:
         - args:
             - api
             - --cert-dir=/apiserver.local.config/certificates
-            - --cluster-roles=control-api:organization-viewer,control-api:organization-admin
+            - --cluster-roles=control-api:organization-viewer,control-api:organization-admin,control-api:organization-test
             - --feature-gates=APIPriorityAndFairness=false
             - --secure-port=9443
             - --tls-cert-file=/apiserver.local.config/certificates/tls.crt

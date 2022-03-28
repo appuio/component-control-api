@@ -18,6 +18,7 @@ spec:
       containers:
         - args:
             - controller
+            - --member-roles=admin
             - --username-prefix=appuio#
           image: ghcr.io/appuio/control-api:v0.6.0
           name: controller
