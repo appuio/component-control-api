@@ -7,13 +7,13 @@ local kube = import 'lib/kube.libjsonnet';
 local inv = kap.inventory();
 local params = inv.parameters.control_api;
 
-local serviceAccount = common.LoadManifest('rbac/service_account.yaml') {
+local serviceAccount = common.LoadManifest('rbac/apiserver/service_account.yaml') {
   metadata+: {
     namespace: params.namespace,
   },
 };
 
-local role = common.LoadManifest('rbac/role.yaml');
+local role = common.LoadManifest('rbac/apiserver/role.yaml');
 
 local certSecret =
   if params.apiserver.tls.certSecretName != null then
@@ -46,7 +46,7 @@ local extraDeploymentArgs =
 ;
 
 
-local deployment = common.LoadManifest('deployment/deployment.yaml') {
+local deployment = common.LoadManifest('deployment/apiserver/deployment.yaml') {
   metadata+: {
     namespace: params.namespace,
   },
@@ -80,7 +80,7 @@ local deployment = common.LoadManifest('deployment/deployment.yaml') {
   },
 };
 
-local service = common.LoadManifest('deployment/service.yaml') {
+local service = common.LoadManifest('deployment/apiserver/service.yaml') {
   metadata+: {
     namespace: params.namespace,
   },
@@ -106,7 +106,7 @@ local service = common.LoadManifest('deployment/service.yaml') {
       },
     ],
   },
-  '01_role_binding_auth_delegator': common.LoadManifest('rbac/role_binding_auth_delegator.yaml') {
+  '01_role_binding_auth_delegator': common.LoadManifest('rbac/apiserver/role_binding_auth_delegator.yaml') {
     subjects: [
       {
         kind: 'ServiceAccount',
@@ -119,7 +119,7 @@ local service = common.LoadManifest('deployment/service.yaml') {
   '02_deployment': deployment,
   [if certSecret != null then '02_certs']: certSecret,
   '02_service': service,
-  '02_apiservice': common.LoadManifest('deployment/apiservice.yaml') {
+  '02_apiservice': common.LoadManifest('deployment/apiserver/apiservice.yaml') {
     spec+: {
              service: {
                name: service.metadata.name,

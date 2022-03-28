@@ -11,5 +11,5 @@ roleRef:
   name: control-api-apiserver
 subjects:
   - kind: ServiceAccount
-    name: control-api
+    name: control-api-apiserver
     namespace: appuio-control-api
