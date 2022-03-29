@@ -1,6 +1,6 @@
-= Setup a TLS certificate for the Control-API
+= Setup TLS certificates for the Control-API
 
-This guide provides an example how to setup a TLS certificate for the Control-API.
+This guide provides an example how to setup TLS certificates for the Control-API API server and admission webhook server.
 This ensures encrypted and trusted communication between the Kubernetes API server and the aggregate API server provided by the Control-API.
 
 ====
@@ -25,12 +25,16 @@ commodore catalog compile ${CLUSTER_ID}"
 ----
 # Adjust the lifetime as necessary
 lifetime=3650
-# Adjust servicename if the namespace differs
+# Adjust API server servicename if the namespace differs
 servicename=control-api-apiserver.appuio-control-api.svc
 openssl req -x509 -newkey rsa:4096 -nodes -keyout apiserver.key -out apiserver.crt -days ${lifetime} -subj "/CN=$servicename" -addext "subjectAltName = DNS:$servicename"
+
+# Adjust admission webhook servicename if the namespace differs
+servicename=webhook-service.appuio-control-api.svc
+openssl req -x509 -newkey rsa:4096 -nodes -keyout webhook.key -out webhook.crt -days ${lifetime} -subj "/CN=$servicename" -addext "subjectAltName = DNS:$servicename"
 ----
 
-. Store key in Vault
+. Store keys in Vault
 +
 [source,bash]
 ----
@@ -39,14 +43,20 @@ parent="clusters/kv/${TENANT_ID}/${CLUSTER_ID}"
 
 # Use the 'patch' subcommand to add to existing secret
 vault kv patch "${parent}/${instance}" apiserver-key=@apiserver.key
+vault kv patch "${parent}/${instance}" webhook-key=@webhook.key
 ----
 
-. Add certificate to cluster config
+. Add certificates to cluster config
 +
 [source,bash]
 ----
 apicert=$(cat apiserver.crt)
-yq eval -i ".parameter.control_api.apiserver.tls.serverCert = \"${apicert}\"" \
+yq eval -i ".parameters.control_api.apiserver.tls.serverCert = \"${apicert}\"" \
+  inventory/classes/${TENANT_ID}/${CLUSTER_ID}.yml
+webhookcert=$(cat webhook.crt)
+yq eval -i ".parameters.control_api.controller.webhookTls.certificate = \"${webhookcert}\"" \
+  inventory/classes/${TENANT_ID}/${CLUSTER_ID}.yml
+yq eval -i '.parameters.control_api.controller.webhookTls.caCertificate = "${control_api:controller:webhookTls:certificate}"' \
   inventory/classes/${TENANT_ID}/${CLUSTER_ID}.yml
 ----
 
@@ -56,7 +66,7 @@ yq eval -i ".parameter.control_api.apiserver.tls.serverCert = \"${apicert}\"" \
 ----
 cd inventory/classes/${TENANT_ID}
 git add ${CLUSTER_ID}.yml
-git commit -m "Configure Control API APIService certificate"
+git commit -m "Configure Control API APIService and admission webhook certificates"
 git push origin master
 popd
 ----
@@ -65,6 +75,5 @@ popd
 +
 [source,bash]
 ----
-rm apiserver.{key,crt}
+rm apiserver.{key,crt} webhook.{key,crt}
 ----
-

@@ -17,9 +17,12 @@ local serviceAccount = common.LoadManifest('rbac/controller/service_account.yaml
 local role = com.namespaced(params.namespace, common.LoadManifest('rbac/controller/role.yaml'));
 local leaderElectionRole = com.namespaced(params.namespace, common.LoadManifest('rbac/controller/leader_election_role.yaml'));
 
+local webhookCertDir = '/var/run/webhook-service-tls';
+
 local extraDeploymentArgs =
   [
     '--username-prefix=' + params.username_prefix,
+    '--webhook-cert-dir=' + webhookCertDir,
   ]
 ;
 
@@ -36,13 +39,64 @@ local deployment = common.LoadManifest('deployment/controller/deployment.yaml') 
             c {
               image: '%(registry)s/%(image)s:%(tag)s' % params.images['control-api'],
               args: [ super.args[0] ] + common.MergeArgs(common.MergeArgs(super.args[1:], extraDeploymentArgs), params.controller.extraArgs),
+              volumeMounts+: [
+                {
+                  name: 'webhook-service-tls',
+                  mountPath: webhookCertDir,
+                  readOnly: true,
+                },
+              ],
             }
           else
             c
           for c in super.containers
         ],
+        volumes+: [
+          {
+            name: 'webhook-service-tls',
+            secretName: params.controller.webhookTls.certSecretName,
+          },
+        ],
       },
     },
+  },
+};
+
+local admissionWebhookTlsSecret =
+  assert std.length(params.controller.webhookTls.certificate) > 0 : 'controller.webhookTls.certificate is required';
+  assert std.length(params.controller.webhookTls.key) > 0 : 'controller.webhookTls.key is required';
+  kube.Secret(params.controller.webhookTls.certSecretName) {
+    metadata+: {
+      namespace: params.namespace,
+    },
+    type: 'kubernetes.io/tls',
+    stringData: {
+      'tls.key': params.controller.webhookTls.key,
+      'tls.crt': params.controller.webhookTls.certificate,
+    },
+  };
+
+local admissionWebhook = common.LoadManifest('webhook/manifests.yaml') {
+  metadata+: {
+    name: '%s-validating-webhook' % params.namespace,
+  },
+  webhooks: [
+    w {
+      clientConfig+: {
+        [if std.length(params.controller.webhookTls.caCertificate) > 0 then 'caBundle']:
+          std.base64(params.controller.webhookTls.caCertificate),
+        service+: {
+          namespace: params.namespace,
+        },
+      },
+    }
+    for w in super.webhooks
+  ],
+};
+
+local admissionWebhookService = common.LoadManifest('webhook/service.yaml') {
+  metadata+: {
+    namespace: params.namespace,
   },
 };
 
@@ -82,4 +136,7 @@ local deployment = common.LoadManifest('deployment/controller/deployment.yaml') 
   },
   '01_service_account': serviceAccount,
   '02_deployment': deployment,
+  '10_webhook_cert_secret': admissionWebhookTlsSecret,
+  '10_webhook_config': admissionWebhook,
+  '11_webhook_service': admissionWebhookService,
 }

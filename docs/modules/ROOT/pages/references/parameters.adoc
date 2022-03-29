@@ -117,6 +117,47 @@ default:: `[]`
 
 A list of extra command line arguments for the control-api controller deployment.
 
+== `controller.webhookTls`
+
+This key configures encryption of traffic to the controller's admission webhook server.
+The Kubernetes API server only communicates with admission webhooks over HTTPS.
+Therefore, the component requires that both `controller.webhookTls.certificate` and `controller.webhookTls.key` are configured.
+
+=== `controller.webhookTls.certSecretName`
+
+[horizontal]
+type:: string
+default:: `webhook-service-tls`
+
+The name of the secret containing the TLS certificate and key for the controller's webhook server.
+
+=== `controller.webhookTls.caCertificate`
+
+[horizontal]
+type:: string
+default:: `""`
+
+The CA certificate used to sign the webhook service certificate.
+If left empty, the component assumes that the provided certificate can be verified using the cluster's default CA bundle.
+
+If you deploy a self-signed certificate, set this parameter to `${control_api:controller:webhookTls:certificate}`.
+
+=== `controller.webhookTls.certificate`
+
+[horizontal]
+type:: string
+default:: `""`
+
+The certificate to use for the controller's admission webhook server.
+Users must provide this parameter, since Kubernetes doesn't support admission webhooks which aren't secured with TLS.
+
+=== `controller.webhookTls.key`
+
+[horizontal]
+type:: string
+default:: `?{vaultkv:${customer:name}/${cluster:name}/${_instance}/webhook-key}`
+
+The private key to use for the controller's admission webhook server.
 
 == `idp_adapter.enabled`
 
