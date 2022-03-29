@@ -20,7 +20,7 @@ spec:
             - controller
             - --member-roles=admin
             - --username-prefix=appuio#
-          image: ghcr.io/appuio/control-api:v0.7.1
+          image: ghcr.io/appuio/control-api:v0.8.1
           name: controller
           ports:
             - containerPort: 9443
