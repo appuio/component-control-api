@@ -54,7 +54,9 @@ local deployment = common.LoadManifest('deployment/controller/deployment.yaml') 
         volumes+: [
           {
             name: 'webhook-service-tls',
-            secretName: params.controller.webhookTls.certSecretName,
+            secret: {
+              secretName: params.controller.webhookTls.certSecretName,
+            },
           },
         ],
       },
