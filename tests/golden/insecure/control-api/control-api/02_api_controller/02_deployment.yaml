@@ -19,7 +19,8 @@ spec:
         - args:
             - controller
             - --username-prefix=appuio#
-          image: ghcr.io/appuio/control-api:v0.7.1
+            - --webhook-cert-dir=/var/run/webhook-service-tls
+          image: ghcr.io/appuio/control-api:v0.8.1
           name: controller
           ports:
             - containerPort: 9443
@@ -30,4 +31,11 @@ spec:
             requests:
               cpu: 100m
               memory: 100Mi
+          volumeMounts:
+            - mountPath: /var/run/webhook-service-tls
+              name: webhook-service-tls
+              readOnly: true
       serviceAccountName: control-api-controller
+      volumes:
+        - name: webhook-service-tls
+          secretName: webhook-service-tls
