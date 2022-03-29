@@ -38,4 +38,5 @@ spec:
       serviceAccountName: control-api-controller
       volumes:
         - name: webhook-service-tls
-          secretName: webhook-service-tls
+          secret:
+            secretName: webhook-service-tls
