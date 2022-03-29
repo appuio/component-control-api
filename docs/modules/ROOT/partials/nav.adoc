@@ -1,6 +1,6 @@
 * xref:index.adoc[Home]
 
-* xref:how-tos/tls.adoc[Setup TLS Certificate]
+* xref:how-tos/tls.adoc[Setup TLS Certificates]
 
 .Technical Reference
 * xref:references/parameters.adoc[Parameters]
