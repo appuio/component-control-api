@@ -19,6 +19,14 @@ default:: https://github.com/appuio/component-control-api/blob/master/class/defa
 Dictionary containing the container images used by this component.
 
 
+== `apiserver.extraArgs`
+
+[horizontal]
+type:: list(string)
+default:: `[]`
+
+A list of extra command line arguments for the control-api API server deployment.
+
 == `apiserver.apiservice`
 type:: dict
 
@@ -91,6 +99,23 @@ type:: string
 default:: `admin`
 
 The name of the OpenID Connect role to allow administrator impersonation.
+
+== `username_prefix`
+
+[horizontal]
+type:: string
+default:: `appuio#`
+
+The prefix used for OIDC users in the Kubernetes API server.
+
+
+== `controller.extraArgs`
+
+[horizontal]
+type:: list(string)
+default:: `[]`
+
+A list of extra command line arguments for the control-api controller deployment.
 
 
 == `idp_adapter.enabled`
