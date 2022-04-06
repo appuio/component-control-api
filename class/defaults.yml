@@ -18,7 +18,7 @@ parameters:
       tls:
         certSecretName: control-api-tls
         serverCert: ""
-        serverKey: "?{vaultkv:${customer:name}/${cluster:name}/${_instance}/apiserver-key}"
+        serverKey: "?{vaultkv:${cluster:tenant}/${cluster:name}/${_instance}/apiserver-key}"
 
     controller:
       extraArgs: []
@@ -26,7 +26,7 @@ parameters:
         certSecretName: webhook-service-tls
         caCertificate: ""
         certificate: ""
-        key: "?{vaultkv:${customer:name}/${cluster:name}/${_instance}/webhook-key}"
+        key: "?{vaultkv:${cluster:tenant}/${cluster:name}/${_instance}/webhook-key}"
 
     idp_adapter:
       enabled: false
