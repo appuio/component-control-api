@@ -52,7 +52,7 @@ default:: ""
 
 === `apiserver.tls.serverKey`
 type:: string
-default:: "?{vaultkv:${customer:name}/${cluster:name}/${_instance}/apiserver-key}"
+default:: "?{vaultkv:${cluster:tenant}/${cluster:name}/${_instance}/apiserver-key}"
 
 == `zones`
 
@@ -155,7 +155,7 @@ Users must provide this parameter, since Kubernetes doesn't support admission we
 
 [horizontal]
 type:: string
-default:: `?{vaultkv:${customer:name}/${cluster:name}/${_instance}/webhook-key}`
+default:: `?{vaultkv:${cluster:tenant}/${cluster:name}/${_instance}/webhook-key}`
 
 The private key to use for the controller's admission webhook server.
 
