@@ -5,7 +5,7 @@ on:
       - master
 
 env:
-  COMPONENT_NAME: control-api
+  COMPONENT_NAME: APPUiO Control API
 
 jobs:
   linting:
