@@ -51,4 +51,4 @@ parameters:
       idp-adapter:
         registry: ghcr.io
         image: vshn/appuio-keycloak-adapter
-        tag: v0.5.2
+        tag: v0.5.3
