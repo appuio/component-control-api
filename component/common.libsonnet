@@ -12,6 +12,7 @@ local defaultLabels = {
 
 local image = params.images['control-api'];
 local loadManifest(manifest) = std.parseJson(kap.yaml_load('control-api/manifests/' + image.tag + '/' + manifest));
+local loadManifestStream(manifest) = std.parseJson(kap.yaml_load_stream('control-api/manifests/' + image.tag + '/' + manifest));
 
 local mergeArgs(args, additional) =
   local foldFn =
@@ -25,5 +26,6 @@ local mergeArgs(args, additional) =
 {
   DefaultLabels: defaultLabels,
   LoadManifest: loadManifest,
+  LoadManifestStream: loadManifestStream,
   MergeArgs: mergeArgs,
 }
