@@ -88,35 +88,39 @@ local service = common.LoadManifest('deployment/apiserver/service.yaml') {
   },
 };
 
-local apiService =
-  local manifest = common.LoadManifest('deployment/apiserver/apiservice.yaml') {
-    spec+:
-      {
-        service: {
-          name: service.metadata.name,
-          namespace: service.metadata.namespace,
-        },
-      }
-      +
-      (
-        if params.apiserver.tls.serverCert != null
-           && params.apiserver.tls.serverCert != ''
-        then
-          { caBundle: std.base64(params.apiserver.tls.serverCert) }
-        else
-          {}
-      )
-      +
-      params.apiserver.apiservice,
-  };
-  if !manifest.spec.insecureSkipTLSVerify then
-    manifest {
-      spec+: {
-        insecureSkipTLSVerify:: false,
-      },
-    }
-  else
-    manifest;
+local apiServices =
+  std.map(
+    function(upstream)
+      local manifest = upstream {
+        spec+:
+          {
+            service: {
+              name: service.metadata.name,
+              namespace: service.metadata.namespace,
+            },
+          }
+          +
+          (
+            if params.apiserver.tls.serverCert != null
+               && params.apiserver.tls.serverCert != ''
+            then
+              { caBundle: std.base64(params.apiserver.tls.serverCert) }
+            else
+              {}
+          )
+          +
+          params.apiserver.apiservice,
+      };
+      if !manifest.spec.insecureSkipTLSVerify then
+        manifest {
+          spec+: {
+            insecureSkipTLSVerify:: false,
+          },
+        }
+      else
+        manifest,
+    common.LoadManifestStream('deployment/apiserver/apiservice.yaml')
+  );
 
 {
   '01_role': role,
@@ -147,5 +151,5 @@ local apiService =
   '02_deployment': deployment,
   [if certSecret != null then '02_certs']: certSecret,
   '02_service': service,
-  '02_apiservice': apiService,
+  '02_apiservice': apiServices,
 }
