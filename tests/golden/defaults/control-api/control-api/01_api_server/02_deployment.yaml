@@ -25,6 +25,12 @@ spec:
             - --tls-cert-file=/apiserver.local.config/certificates/tls.crt
             - --tls-private-key-file=/apiserver.local.config/certificates/tls.key
             - --username-prefix=appuio#
+          env:
+            - name: ODOO_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: url
+                  name: odoo-credentials
           image: ghcr.io/appuio/control-api:v0.10.0
           name: apiserver
           ports:

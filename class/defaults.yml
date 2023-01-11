@@ -13,6 +13,7 @@ parameters:
 
     apiserver:
       extraArgs: []
+      extraEnv: {}
       apiservice:
         insecureSkipTLSVerify: false
       tls:
@@ -22,6 +23,7 @@ parameters:
 
     controller:
       extraArgs: []
+      extraEnv: {}
       webhookTls:
         certSecretName: webhook-service-tls
         caCertificate: ""

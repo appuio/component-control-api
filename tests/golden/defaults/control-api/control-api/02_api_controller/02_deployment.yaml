@@ -21,6 +21,7 @@ spec:
             - --member-roles=admin
             - --username-prefix=appuio#
             - --webhook-cert-dir=/var/run/webhook-service-tls
+          env: []
           image: ghcr.io/appuio/control-api:v0.10.0
           name: controller
           ports:
