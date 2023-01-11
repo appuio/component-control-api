@@ -23,6 +23,7 @@ spec:
             - --feature-gates=APIPriorityAndFairness=false
             - --secure-port=9443
             - --username-prefix=appuio#
+          env: []
           image: ghcr.io/appuio/control-api:v0.10.0
           name: apiserver
           ports:

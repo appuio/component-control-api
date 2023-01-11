@@ -1,6 +1,11 @@
 parameters:
   control_api:
     apiserver:
+      extraEnv:
+        ODOO_PASSWORD:
+          secretKeyRef:
+            name: odoo-credentials
+            key: url
       extraArgs:
         - --cluster-roles=control-api:organization-viewer,control-api:organization-admin,control-api:organization-test
       tls:

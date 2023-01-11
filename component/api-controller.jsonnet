@@ -39,6 +39,7 @@ local deployment = common.LoadManifest('deployment/controller/deployment.yaml') 
             c {
               image: '%(registry)s/%(image)s:%(tag)s' % params.images['control-api'],
               args: [ super.args[0] ] + common.MergeArgs(common.MergeArgs(super.args[1:], extraDeploymentArgs), params.controller.extraArgs),
+              env+: com.envList(params.controller.extraEnv),
               volumeMounts+: [
                 {
                   name: 'webhook-service-tls',

@@ -27,6 +27,28 @@ default:: `[]`
 
 A list of extra command line arguments for the control-api API server deployment.
 
+
+== `apiserver.extraEnv`
+
+[horizontal]
+type:: list
+default:: `{}`
+example::
++
+[source,yaml]
+----
+extraEnv:
+  ODOO_PASSWORD:
+    secretKeyRef:
+      name: odoo-user
+      key: password
+  DEBUG: "true"
+----
+
+Additional environment that should be passed to the API server.
+If a dict is given `valueFrom:` is assumed.
+
+
 == `apiserver.apiservice`
 type:: dict
 
@@ -116,6 +138,24 @@ type:: list(string)
 default:: `[]`
 
 A list of extra command line arguments for the control-api controller deployment.
+
+
+== `controller.extraEnv`
+
+[horizontal]
+type:: list
+default:: `{}`
+example::
++
+[source,yaml]
+----
+extraEnv:
+  DEBUG: "true"
+----
+
+Additional environment that should be passed to the controller.
+If a dict is given `valueFrom:` is assumed.
+
 
 == `controller.webhookTls`
 

@@ -6,6 +6,7 @@ local kap = import 'lib/kapitan.libjsonnet';
 local kube = import 'lib/kube.libjsonnet';
 local inv = kap.inventory();
 local params = inv.parameters.control_api;
+local com = import 'lib/commodore.libjsonnet';
 
 local serviceAccount = common.LoadManifest('rbac/apiserver/service_account.yaml') {
   metadata+: {
@@ -58,6 +59,7 @@ local deployment = common.LoadManifest('deployment/apiserver/deployment.yaml') {
             c {
               image: '%(registry)s/%(image)s:%(tag)s' % params.images['control-api'],
               args: [ super.args[0] ] + common.MergeArgs(common.MergeArgs(super.args[1:], extraDeploymentArgs), params.apiserver.extraArgs),
+              env+: com.envList(params.apiserver.extraEnv),
             }
           else
             c
