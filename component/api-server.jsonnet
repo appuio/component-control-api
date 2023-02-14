@@ -35,6 +35,7 @@ local certSecret =
 local extraDeploymentArgs =
   [
     '--username-prefix=' + params.username_prefix,
+    '--invitation-storage-backing-ns=' + params.invitation_store_namespace,
   ] +
   if certSecret != null then
     [

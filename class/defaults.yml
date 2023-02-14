@@ -3,6 +3,7 @@ parameters:
     =_metadata: {}
 
     namespace: appuio-control-api
+    invitation_store_namespace: ${control_api:namespace}-invitations
 
     zones: {}
 

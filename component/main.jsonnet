@@ -20,7 +20,10 @@ local zones = [
 
 // Define outputs below
 {
-  '00_namespace': kube.Namespace(params.namespace),
+  '00_namespace': [
+    kube.Namespace(params.namespace),
+    kube.Namespace(params.invitation_store_namespace),
+  ],
   '10_rbac_cluster_admin_impersonation': (import 'rbac-cluster-admin-impersonation.libsonnet'),
   '10_rbac_basic_user': (import 'rbac-basic-user.libsonnet'),
   '10_rbac_organization': (import 'rbac-organization.libsonnet'),

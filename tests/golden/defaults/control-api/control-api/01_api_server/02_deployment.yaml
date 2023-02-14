@@ -21,6 +21,7 @@ spec:
             - --cert-dir=/apiserver.local.config/certificates
             - --cluster-roles=control-api:organization-viewer,control-api:organization-admin,control-api:organization-test
             - --feature-gates=APIPriorityAndFairness=false
+            - --invitation-storage-backing-ns=appuio-control-api-invitations
             - --secure-port=9443
             - --tls-cert-file=/apiserver.local.config/certificates/tls.crt
             - --tls-private-key-file=/apiserver.local.config/certificates/tls.key
