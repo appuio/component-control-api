@@ -8,37 +8,66 @@ metadata:
   name: control-api-tls
   namespace: appuio-control-api
 stringData:
-  tls.crt: |-
-    -----BEGIN CERTIFICATE-----
+  tls.crt: '-----BEGIN CERTIFICATE-----
+
     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
+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
+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
+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
+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
+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
+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
+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
+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
+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
+
     O184jhVpK3lD7B6L9Snyny8xjz9ofv5PZ3jz12o8NAiSfXsfD+Rg5/emN5/y+BgA
+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
+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
+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
+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
+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
+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
+
     Y29udHJvbC1hcGkuc3ZjMA0GCSqGSIb3DQEBCwUAA4ICAQBjLHbQTJtxA4+qHsN4
+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
+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
+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
+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
+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
+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
+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
+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
+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
+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
+
     6Pt7VC4M/9kv/2GvdtKVzbiRjw==
-    -----END CERTIFICATE-----
+
+    -----END CERTIFICATE-----'
   tls.key: t-silent-test-1234/c-green-test-1234/control-api/apiserver-key
 type: Opaque
