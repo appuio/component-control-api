@@ -39,6 +39,7 @@ rules:
     resources:
       - billingentities
     verbs:
+      - create
       - watch
       - list
   - apiGroups:
@@ -46,6 +47,7 @@ rules:
     resources:
       - billingentities
     verbs:
+      - create
       - get
       - watch
       - list
