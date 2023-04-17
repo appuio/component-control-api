@@ -6,7 +6,7 @@ parameters:
       tls:
         certSecretName: null
 
-    billing:
+    odoo8:
       countries: null
 
     controller:

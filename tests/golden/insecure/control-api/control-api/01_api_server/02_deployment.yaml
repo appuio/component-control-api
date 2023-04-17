@@ -18,7 +18,6 @@ spec:
       containers:
         - args:
             - api
-            - --billing-entity-odoo8-country-list=/config/billing_entity_odoo8_country_list.yaml
             - --cert-dir=/apiserver.local.config/certificates
             - --cluster-roles=control-api:organization-viewer,control-api:organization-admin
             - --feature-gates=APIPriorityAndFairness=false
@@ -40,14 +39,7 @@ spec:
           volumeMounts:
             - mountPath: /apiserver.local.config/certificates
               name: apiserver-certs
-            - mountPath: /config
-              name: countries-config
-              readOnly: true
-              subPath: billing_entity_odoo8_country_list.yaml
       serviceAccountName: control-api-apiserver
       volumes:
         - emptyDir: {}
           name: apiserver-certs
-        - configMap:
-            name: billing-entity-odoo8-country-list
-          name: countries-config

@@ -95,7 +95,7 @@ local deployment = common.LoadManifest('deployment/apiserver/deployment.yaml') {
                   if hasCountriesConfig then
                     [ {
                       name: 'countries-config',
-                      mountPath: '/config',
+                      mountPath: '/config/billing_entity_odoo8_country_list.yaml',
                       readOnly: true,
                       subPath: 'billing_entity_odoo8_country_list.yaml',
                     } ]
