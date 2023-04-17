@@ -1,0 +1,32 @@
+= Alert rule: PatchReconcileErrors
+
+include::partial$runbooks/contribution_note.adoc[]
+
+== icon:glasses[] Overview
+
+This alert fires if any Invitation objects have an EmailSent status of "False".
+This is usually the result of an error during e-mail sending.
+
+== icon:bug[] Steps for debugging
+
+
+=== Check the status of the invitation resources
+
+[source,shell]
+----
+$ kubectl get invitations -o custom-columns='NAME:.metadata.name,EmailSent:{status.conditions[?(@.type=="EmailSent")].status},EmailSentReason:{status.conditions[?(@.type=="EmailSent")].reason},EmailSentMessage:{status.conditions[?(@.type=="EmailSent")].message}'
+----
+
+Check for invitations with `EmailSent = False`.
+They should contain the associated error message.
+
+The error message should hopefully identify the underlying problem, which can then be fixed in the appropriate place.
+This may be in the invitation resource itself, or in the e-mail backend (such as Mailgun).
+
+=== Check the logs of the controller
+
+If the error message is lacking context, the logs of the controller can be checked additionally:
+[source,shell]
+----
+$ kubectl -n control-api logs deploy/control-api-controller -c controller
+----
