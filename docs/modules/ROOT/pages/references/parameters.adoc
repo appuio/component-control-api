@@ -19,6 +19,49 @@ default:: https://github.com/appuio/component-control-api/blob/master/class/defa
 Dictionary containing the container images used by this component.
 
 
+== `odoo8.countries`
+
+[horizontal]
+type:: dictionary
+default:: See https://github.com/appuio/component-control-api/blob/master/class/defaults.yml[See `class/defaults.yml`]
+example::
++
+[source,yaml]
+----
+odoo8:
+  countries:
+    Switzerland:
+      code: CH
+      id: 44
+    Liechtenstein:
+      code: LI
+      id: 129
+----
+
+Dictionary containing allowed countries and their Odoo 8 configuration.
+
+The key is the name of the country as it should be displayed in the UI.
+The value is a dictionary containing the `id` and `code` of the country in Odoo 8.
+
+
+=== `odoo8.countries.*.id`
+
+[horizontal]
+type:: integer
+
+The ID of the country in Odoo 8. Check the Odoo 8 database for the correct value.
+An export of the country IDs defined in the VSHN Odoo is available https://github.com/appuio/control-api/blob/master/countries-export-full.yaml[here].
+
+
+=== `odoo8.countries.*.code`
+
+[horizontal]
+type:: string
+
+The ISO 3166-1 alpha-2 code of the country. Check the Odoo 8 database for the correct value.
+An export is available https://github.com/appuio/control-api/blob/master/countries-export-full.yaml[here].
+
+
 == `apiserver.extraArgs`
 
 [horizontal]

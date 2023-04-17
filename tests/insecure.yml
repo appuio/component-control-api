@@ -6,6 +6,9 @@ parameters:
       tls:
         certSecretName: null
 
+    billing:
+      countries: null
+
     controller:
       webhookTls:
         certificate: |-

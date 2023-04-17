@@ -7,6 +7,30 @@ parameters:
 
     zones: {}
 
+    odoo8:
+      countries:
+        Switzerland:
+          code: CH
+          id: 44
+        Liechtenstein:
+          code: LI
+          id: 129
+        Austria:
+          code: AT
+          id: 13
+        Italy:
+          code: IT
+          id: 110
+        France:
+          code: FR
+          id: 76
+        Germany:
+          code: DE
+          id: 58
+        United Kingdom:
+          code: GB
+          id: 233
+
     cluster_admin_impersonation:
       oidc_administrator_role: admin
 
