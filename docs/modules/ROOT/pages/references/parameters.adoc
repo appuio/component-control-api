@@ -50,7 +50,7 @@ The value is a dictionary containing the `id` and `code` of the country in Odoo 
 type:: integer
 
 The ID of the country in Odoo 8. Check the Odoo 8 database for the correct value.
-An export is available https://github.com/appuio/control-api/blob/master/countries-export-full.yaml[here].
+An export of the country IDs defined in the VSHN Odoo is available https://github.com/appuio/control-api/blob/master/countries-export-full.yaml[here].
 
 
 === `odoo8.countries.*.code`
