@@ -47,7 +47,7 @@ spec:
           volumeMounts:
             - mountPath: /apiserver.local.config/certificates
               name: apiserver-certs
-            - mountPath: /config
+            - mountPath: /config/billing_entity_odoo8_country_list.yaml
               name: countries-config
               readOnly: true
               subPath: billing_entity_odoo8_country_list.yaml
