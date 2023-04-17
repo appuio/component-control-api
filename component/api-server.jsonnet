@@ -16,6 +16,8 @@ local serviceAccount = common.LoadManifest('rbac/apiserver/service_account.yaml'
 
 local role = common.LoadManifest('rbac/apiserver/role.yaml');
 
+local hasCountriesConfig = params.odoo8.countries != null && std.length(params.odoo8.countries) > 0;
+
 local certSecret =
   if params.apiserver.tls.certSecretName != null then
     assert std.length(params.apiserver.tls.serverCert) > 0 : 'apiserver.tls.serverCert is required';
@@ -36,16 +38,43 @@ local extraDeploymentArgs =
   [
     '--username-prefix=' + params.username_prefix,
     '--invitation-storage-backing-ns=' + params.invitation_store_namespace,
-  ] +
-  if certSecret != null then
-    [
-      '--tls-cert-file=/apiserver.local.config/certificates/tls.crt',
-      '--tls-private-key-file=/apiserver.local.config/certificates/tls.key',
-    ]
-  else
-    []
+  ]
+  +
+  (if certSecret != null then
+     [
+       '--tls-cert-file=/apiserver.local.config/certificates/tls.crt',
+       '--tls-private-key-file=/apiserver.local.config/certificates/tls.key',
+     ]
+   else
+     [])
+  +
+  (if hasCountriesConfig then
+     [
+       '--billing-entity-odoo8-country-list=/config/billing_entity_odoo8_country_list.yaml',
+     ]
+   else
+     [])
 ;
 
+local countryList = std.filterMap(
+  function(name) params.odoo8.countries[name] != null,
+  function(name) {
+    name: name,
+    code: params.odoo8.countries[name].code,
+    id: params.odoo8.countries[name].id,
+  },
+  std.objectFields(params.odoo8.countries)
+);
+
+local countriesConfigMap =
+  kube.ConfigMap('billing-entity-odoo8-country-list') {
+    metadata+: {
+      namespace: params.namespace,
+    },
+    data: {
+      'billing_entity_odoo8_country_list.yaml': std.manifestYamlDoc(countryList),
+    },
+  };
 
 local deployment = common.LoadManifest('deployment/apiserver/deployment.yaml') {
   metadata+: {
@@ -54,30 +83,55 @@ local deployment = common.LoadManifest('deployment/apiserver/deployment.yaml') {
 
   spec+: {
     template+: {
-      spec+: {
-        containers: [
-          if c.name == 'apiserver' then
-            c {
-              image: '%(registry)s/%(image)s:%(tag)s' % params.images['control-api'],
-              args: [ super.args[0] ] + common.MergeArgs(common.MergeArgs(super.args[1:], extraDeploymentArgs), params.apiserver.extraArgs),
-              env+: com.envList(params.apiserver.extraEnv),
-            }
-          else
-            c
-          for c in super.containers
-        ],
-      } + if certSecret != null then
+      spec+:
         {
-          volumes: [
-            {
-              name: 'apiserver-certs',
-              secret: {
-                secretName: certSecret.metadata.name,
-              },
-            },
+          containers: [
+            if c.name == 'apiserver' then
+              c {
+                image: '%(registry)s/%(image)s:%(tag)s' % params.images['control-api'],
+                args: [ super.args[0] ] + common.MergeArgs(common.MergeArgs(super.args[1:], extraDeploymentArgs), params.apiserver.extraArgs),
+                env+: com.envList(params.apiserver.extraEnv),
+                volumeMounts+:
+                  if hasCountriesConfig then
+                    [ {
+                      name: 'countries-config',
+                      mountPath: '/config',
+                      readOnly: true,
+                      subPath: 'billing_entity_odoo8_country_list.yaml',
+                    } ]
+                  else
+                    [],
+              }
+            else
+              c
+            for c in super.containers
           ],
         }
-      else {},
+        + (if certSecret != null then
+             {
+               volumes: [
+                 {
+                   name: 'apiserver-certs',
+                   secret: {
+                     secretName: certSecret.metadata.name,
+                   },
+                 },
+               ],
+             }
+           else
+             {})
+        + (if hasCountriesConfig then
+             {
+               volumes+: [
+                 {
+                   name: 'countries-config',
+                   configMap: {
+                     name: countriesConfigMap.metadata.name,
+                   },
+                 },
+               ],
+             }
+           else {}),
     },
   },
 };
@@ -151,6 +205,7 @@ local apiServices =
     ],
   },
   '01_service_account': serviceAccount,
+  [if hasCountriesConfig then '01_countries_configmap']: countriesConfigMap,
   '02_deployment': deployment,
   [if certSecret != null then '02_certs']: certSecret,
   '02_service': service,
