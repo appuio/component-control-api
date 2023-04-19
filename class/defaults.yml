@@ -9,27 +9,102 @@ parameters:
 
     odoo8:
       countries:
-        Switzerland:
-          code: CH
-          id: 44
-        Liechtenstein:
-          code: LI
-          id: 129
         Austria:
           code: AT
           id: 13
-        Italy:
-          code: IT
-          id: 110
+        Belgium:
+          code: BE
+          id: 21
+        Bulgaria:
+          code: BG
+          id: 23
+        Canada:
+          code: CA
+          id: 39
+        Croatia:
+          code: HR
+          id: 98
+        Cyprus:
+          code: CY
+          id: 56
+        Czech Republic:
+          code: CZ
+          id: 57
+        Denmark:
+          code: DK
+          id: 60
+        Estonia:
+          code: EE
+          id: 65
+        Finland:
+          code: FI
+          id: 71
         France:
           code: FR
           id: 76
         Germany:
           code: DE
           id: 58
+        Greece:
+          code: GR
+          id: 89
+        Hungary:
+          code: HU
+          id: 100
+        Ireland:
+          code: IE
+          id: 102
+        Italy:
+          code: IT
+          id: 110
+        Latvia:
+          code: LV
+          id: 135
+        Liechtenstein:
+          code: LI
+          id: 129
+        Lithuania:
+          code: LT
+          id: 133
+        Luxembourg:
+          code: LU
+          id: 134
+        Malta:
+          code: MT
+          id: 153
+        Netherlands:
+          code: NL
+          id: 166
+        Poland:
+          code: PL
+          id: 180
+        Portugal:
+          code: PT
+          id: 185
+        Romania:
+          code: RO
+          id: 190
+        Slovakia:
+          code: SK
+          id: 203
+        Slovenia:
+          code: SI
+          id: 201
+        Spain:
+          code: ES
+          id: 69
+        Sweden:
+          code: SE
+          id: 198
+        Switzerland:
+          code: CH
+          id: 44
         United Kingdom:
           code: GB
           id: 233
+        United States:
+          code: US
+          id: 235
 
     cluster_admin_impersonation:
       oidc_administrator_role: admin
