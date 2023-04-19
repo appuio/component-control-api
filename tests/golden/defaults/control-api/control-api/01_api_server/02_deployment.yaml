@@ -12,6 +12,8 @@ spec:
       app: control-api-apiserver
   template:
     metadata:
+      annotations:
+        checksum/countries: a625c0049a00749c1685fc458f98b3f1
       labels:
         app: control-api-apiserver
     spec:

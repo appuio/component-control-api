@@ -83,6 +83,12 @@ local deployment = common.LoadManifest('deployment/apiserver/deployment.yaml') {
 
   spec+: {
     template+: {
+      [if hasCountriesConfig then 'metadata']+: {
+        annotations+: {
+          'checksum/countries':
+            std.md5(countriesConfigMap.data['billing_entity_odoo8_country_list.yaml']),
+        },
+      },
       spec+:
         {
           containers: [
