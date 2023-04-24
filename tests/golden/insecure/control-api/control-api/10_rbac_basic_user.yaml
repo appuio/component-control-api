@@ -8,6 +8,14 @@ metadata:
   name: control-api:basic-user
 rules:
   - apiGroups:
+      - apiextensions.k8s.io
+    resources:
+      - customresourcedefinitions
+    verbs:
+      - get
+      - watch
+      - list
+  - apiGroups:
       - organization.appuio.io
     resources:
       - organizations
