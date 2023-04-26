@@ -99,6 +99,10 @@ parameters:
         Switzerland:
           code: CH
           id: 44
+        # Maps BEs with empty countries to Switzerland automatically.
+        "":
+          code: CH
+          id: 44
         United Kingdom:
           code: GB
           id: 233
