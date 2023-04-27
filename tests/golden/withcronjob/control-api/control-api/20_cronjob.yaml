@@ -1,0 +1,53 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  annotations: {}
+  labels:
+    name: cleanup-inflight-partner-records
+  name: cleanup-inflight-partner-records
+  namespace: appuio-control-api
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 2
+  jobTemplate:
+    spec:
+      completions: 1
+      parallelism: 1
+      template:
+        metadata:
+          labels:
+            name: cleanup-inflight-partner-records
+        spec:
+          containers:
+            - args:
+                - --billing-entity-odoo8-cleanup-after=1h
+                - --billing-entity-odoo8-country-list=/config/billing_entity_odoo8_country_list.yaml
+              env:
+                - name: ODOO_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: url
+                      name: odoo-credentials
+              image: ghcr.io/appuio/control-api:v0.25.1
+              imagePullPolicy: IfNotPresent
+              name: cleanup
+              ports: []
+              stdin: false
+              tty: false
+              volumeMounts:
+                - mountPath: /config/billing_entity_odoo8_country_list.yaml
+                  name: countries-config
+                  readOnly: true
+                  subPath: billing_entity_odoo8_country_list.yaml
+          imagePullSecrets: []
+          initContainers: []
+          nodeSelector:
+            node-role.kubernetes.io/infra: ''
+          restartPolicy: Never
+          terminationGracePeriodSeconds: 30
+          volumes:
+            - configMap:
+                name: billing-entity-odoo8-country-list
+              name: countries-config
+  schedule: 45 0 * * *
+  successfulJobsHistoryLimit: 2

@@ -7,7 +7,7 @@
       "name": "APPUiO Control API",
       "slug": "control-api",
       "parameter_key": "control_api",
-      "test_cases": "defaults insecure",
+      "test_cases": "defaults insecure withcronjob",
       "add_lib": "y",
       "add_pp": "n",
       "add_golden": "y",

@@ -130,6 +130,18 @@ parameters:
         certificate: ""
         key: "?{vaultkv:${cluster:tenant}/${cluster:name}/${_instance}/webhook-key}"
 
+    cleanupJob:
+      enabled: false
+      schedule: '45 0 * * *'
+      extraArgs: []
+      extraEnv: {}
+      nodeSelector:
+        node-role.kubernetes.io/infra: ''
+      jobHistoryLimit: {
+        failed: 2,
+        successful: 2,
+      }
+
     idp_adapter:
       enabled: false
       args: []
