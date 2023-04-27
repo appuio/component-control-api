@@ -310,3 +310,76 @@ secrets:
 A key-value map defining multiple `Secret` for referencing in `secrets`.
 Each entry will generate a `Secret` with the key as its name.
 
+== `cleanupJob.enabled`
+
+[horizontal]
+type:: boolean
+default:: `false`
+
+Controls whether a cronjob for cleaning up stale inflight records should be created.
+
+== `cleanupJob.schedule`
+
+[horizontal]
+type:: string
+default:: `45 0 * * *`
+
+Cron schedule for the cleanup cron job.
+
+== `cleanupJob.extraArgs`
+
+[horizontal]
+type:: list(string)
+default:: `[]`
+
+A list of extra command line arguments for the cleanup container.
+
+
+== `cleanupJob.extraEnv`
+
+[horizontal]
+type:: list
+default:: `{}`
+example::
++
+[source,yaml]
+----
+extraEnv:
+  ODOO_PASSWORD:
+    secretKeyRef:
+      name: odoo-user
+      key: password
+  DEBUG: "true"
+----
+
+Additional environment that should be passed to the cleanup container.
+If a dict is given `valueFrom:` is assumed.
+
+== `cleanupJob.nodeSelector`
+
+[horizontal]
+type:: dictionary
+default::
++
+[source,yaml]
+----
+nodeSelector:
+  node-role.kubernetes.io/infra: ''
+----
+
+Node selector to apply to the cleanup job.
+
+
+== `cleanupJob.jobHistoryLimit.failed`
+[horizontal]
+type:: integer
+default:: 2
+
+How many failed jobs to keep at most.
+
+== `cleanupJob.jobHistoryLimit.successful`
+[horizontal]
+type:: integer
+default:: 2
+
+How many successful jobs to keep at most.

@@ -1,5 +1,5 @@
 /*
-* Deploys the control-api API server
+* Deploys the control-api billing entity cleanup cronjob
 */
 local common = import 'common.libsonnet';
 local kap = import 'lib/kapitan.libjsonnet';
@@ -25,26 +25,6 @@ local extraDeploymentArgs =
      [])
 ;
 
-local countryList = std.filterMap(
-  function(name) params.odoo8.countries[name] != null,
-  function(name) {
-    name: name,
-    code: params.odoo8.countries[name].code,
-    id: params.odoo8.countries[name].id,
-  },
-  std.objectFields(params.odoo8.countries)
-);
-
-local countriesConfigMap =
-  kube.ConfigMap('billing-entity-odoo8-country-list') {
-    metadata+: {
-      namespace: params.namespace,
-    },
-    data: {
-      'billing_entity_odoo8_country_list.yaml': std.manifestYamlDoc(countryList),
-    },
-  };
-
 
 local cronJob = kube.CronJob('cleanup-inflight-partner-records') + namespace {
   spec+: {
@@ -62,31 +42,23 @@ local cronJob = kube.CronJob('cleanup-inflight-partner-records') + namespace {
                 image: '%(registry)s/%(image)s:%(tag)s' % params.images['control-api'],
                 args: common.MergeArgs(extraDeploymentArgs, params.cleanupJob.extraArgs),
                 env+: com.envList(params.cleanupJob.extraEnv),
-                volumeMounts+:
-                  if hasCountriesConfig then
-                    [ {
-                      name: 'countries-config',
-                      mountPath: '/config/billing_entity_odoo8_country_list.yaml',
-                      readOnly: true,
-                      subPath: 'billing_entity_odoo8_country_list.yaml',
-                    } ]
-                  else
-                    [],
-              },
-            }
-          }
-          + (if hasCountriesConfig then
-            {
-              volumes+: [
-                {
-                  name: 'countries-config',
-                  configMap: {
-                    name: countriesConfigMap.metadata.name,
+                [if hasCountriesConfig then 'volumeMounts_']: {
+                  'countries-config': {
+                    mountPath: '/config/billing_entity_odoo8_country_list.yaml',
+                    readOnly: true,
+                    subPath: 'billing_entity_odoo8_country_list.yaml',
                   },
                 },
-              ],
-            }
-            else {}),
+              },
+            },
+            [if hasCountriesConfig then 'volumes_']: {
+              'countries-config': {
+                configMap: {
+                  name: 'billing-entity-odoo8-country-list',
+                },
+              },
+            },
+          },
         },
       },
     },

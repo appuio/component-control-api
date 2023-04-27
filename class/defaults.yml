@@ -137,10 +137,9 @@ parameters:
       extraEnv: {}
       nodeSelector:
         node-role.kubernetes.io/infra: ''
-      jobHistoryLimit: {
-        failed: 2,
-        successful: 2,
-      }
+      jobHistoryLimit:
+        failed: 2
+        successful: 2
 
     idp_adapter:
       enabled: false
