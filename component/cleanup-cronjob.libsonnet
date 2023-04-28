@@ -14,18 +14,6 @@ local namespace = {
   },
 };
 
-local hasCountriesConfig = params.odoo8.countries != null && std.length(params.odoo8.countries) > 0;
-
-local extraDeploymentArgs =
-  (if hasCountriesConfig then
-     [
-       '--billing-entity-odoo8-country-list=/config/billing_entity_odoo8_country_list.yaml',
-     ]
-   else
-     [])
-;
-
-
 local cronJob = kube.CronJob('cleanup-inflight-partner-records') + namespace {
   spec+: {
     schedule: params.cleanupJob.schedule,
@@ -40,22 +28,8 @@ local cronJob = kube.CronJob('cleanup-inflight-partner-records') + namespace {
             containers_+: {
               cleanup: kube.Container('cleanup') {
                 image: '%(registry)s/%(image)s:%(tag)s' % params.images['control-api'],
-                args: common.MergeArgs(extraDeploymentArgs, params.cleanupJob.extraArgs),
+                args: params.cleanupJob.extraArgs,
                 env+: com.envList(params.cleanupJob.extraEnv),
-                [if hasCountriesConfig then 'volumeMounts_']: {
-                  'countries-config': {
-                    mountPath: '/config/billing_entity_odoo8_country_list.yaml',
-                    readOnly: true,
-                    subPath: 'billing_entity_odoo8_country_list.yaml',
-                  },
-                },
-              },
-            },
-            [if hasCountriesConfig then 'volumes_']: {
-              'countries-config': {
-                configMap: {
-                  name: 'billing-entity-odoo8-country-list',
-                },
               },
             },
           },
