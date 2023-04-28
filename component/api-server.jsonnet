@@ -59,7 +59,7 @@ local extraDeploymentArgs =
 local countryList = std.filterMap(
   function(name) params.odoo8.countries[name] != null,
   function(name) {
-    name: name,
+    name: if name == '__empty__' then '' else name,
     code: params.odoo8.countries[name].code,
     id: params.odoo8.countries[name].id,
   },
