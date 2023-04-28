@@ -99,6 +99,11 @@ parameters:
         Switzerland:
           code: CH
           id: 44
+        # Maps BEs with empty countries to Switzerland automatically.
+        # We can't use "" as key because Reclass doesn't like empty dict keys.
+        __empty__:
+          code: CH
+          id: 44
         United Kingdom:
           code: GB
           id: 233

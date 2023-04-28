@@ -97,6 +97,9 @@ data:
     - "code": "US"
       "id": 235
       "name": "United States"
+    - "code": "CH"
+      "id": 44
+      "name": ""
 kind: ConfigMap
 metadata:
   annotations: {}
