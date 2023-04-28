@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations: {}
+  labels:
+    name: appuio-control-api
+  name: appuio-control-api
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations: {}
+  labels:
+    name: appuio-control-api-invitations
+  name: appuio-control-api-invitations

@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: control-api-controller
+  name: control-api-controller
+  namespace: appuio-control-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: control-api-controller
+  template:
+    metadata:
+      labels:
+        app: control-api-controller
+    spec:
+      containers:
+        - args:
+            - controller
+            - --member-roles=admin
+            - --metrics-bind-address=:8080
+            - --username-prefix=appuio#
+            - --webhook-cert-dir=/var/run/webhook-service-tls
+          env: []
+          image: ghcr.io/appuio/control-api:v0.25.1
+          name: controller
+          ports:
+            - containerPort: 9443
+            - containerPort: 8080
+          resources:
+            limits:
+              cpu: 300m
+              memory: 200Mi
+            requests:
+              cpu: 100m
+              memory: 100Mi
+          volumeMounts:
+            - mountPath: /var/run/webhook-service-tls
+              name: webhook-service-tls
+              readOnly: true
+      serviceAccountName: control-api-controller
+      volumes:
+        - name: webhook-service-tls
+          secret:
+            secretName: webhook-service-tls

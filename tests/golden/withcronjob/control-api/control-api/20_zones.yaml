@@ -1,0 +1,27 @@
+apiVersion: appuio.io/v1
+data:
+  cloudProvider:
+    name: example
+    region: region1
+    zones:
+      - zone1
+  cname: cname.example.zone
+  defaultAppDomain: apps.example.zone
+  displayName: Example Zone 1
+  features:
+    kubernetesVersion: '1.22'
+    sdnPlugin: OVN-Kubernetes
+  gatewayIPs:
+    - 100.100.100.100
+  urls:
+    console: https://console.example.zone
+    kubernetesAPI: https://api.example.zone:6443
+kind: Zone
+metadata:
+  annotations: {}
+  labels:
+    app.kubernetes.io/component: control-api
+    app.kubernetes.io/managed-by: commodore
+    app.kubernetes.io/name: control-api
+    name: example-zone-1
+  name: example-zone-1

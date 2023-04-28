@@ -1,0 +1,95 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/component: control-api
+    app.kubernetes.io/managed-by: commodore
+    app.kubernetes.io/name: control-api
+  name: control-api:organization-admin
+rules:
+  - apiGroups:
+      - rbac.appuio.io
+    resources:
+      - organizations
+    verbs:
+      - get
+      - watch
+      - list
+      - patch
+      - update
+      - create
+  - apiGroups:
+      - appuio.io
+    resources:
+      - organizationmembers
+    verbs:
+      - get
+      - watch
+      - list
+      - patch
+      - update
+  - apiGroups:
+      - appuio.io
+    resources:
+      - teams
+    verbs:
+      - get
+      - watch
+      - list
+      - patch
+      - update
+      - create
+      - delete
+  - apiGroups:
+      - rbac.authorization.k8s.io
+    resources:
+      - rolebindings
+    verbs:
+      - get
+      - watch
+      - list
+      - patch
+      - update
+      - create
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/component: control-api
+    app.kubernetes.io/managed-by: commodore
+    app.kubernetes.io/name: control-api
+  name: control-api:organization-viewer
+rules:
+  - apiGroups:
+      - rbac.appuio.io
+    resources:
+      - organizations
+    verbs:
+      - get
+      - watch
+      - list
+  - apiGroups:
+      - appuio.io
+    resources:
+      - organizationmembers
+    verbs:
+      - get
+      - watch
+      - list
+  - apiGroups:
+      - appuio.io
+    resources:
+      - teams
+    verbs:
+      - get
+      - watch
+      - list
+  - apiGroups:
+      - rbac.authorization.k8s.io
+    resources:
+      - rolebindings
+    verbs:
+      - get
+      - watch
+      - list
