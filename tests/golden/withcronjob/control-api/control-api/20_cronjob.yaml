@@ -20,6 +20,7 @@ spec:
         spec:
           containers:
             - args:
+                - cleanup
                 - --billing-entity-odoo8-cleanup-after=1h
               env:
                 - name: ODOO_PASSWORD
@@ -27,7 +28,7 @@ spec:
                     secretKeyRef:
                       key: url
                       name: odoo-credentials
-              image: ghcr.io/appuio/control-api:v0.25.1
+              image: ghcr.io/appuio/control-api:v0.26.0
               imagePullPolicy: IfNotPresent
               name: cleanup
               ports: []
