@@ -28,7 +28,7 @@ local cronJob = kube.CronJob('cleanup-inflight-partner-records') + namespace {
             containers_+: {
               cleanup: kube.Container('cleanup') {
                 image: '%(registry)s/%(image)s:%(tag)s' % params.images['control-api'],
-                args: params.cleanupJob.extraArgs,
+                args: [ 'cleanup' ] + params.cleanupJob.extraArgs,
                 env+: com.envList(params.cleanupJob.extraEnv),
               },
             },
