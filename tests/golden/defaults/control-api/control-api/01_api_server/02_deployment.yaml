@@ -35,7 +35,7 @@ spec:
                 secretKeyRef:
                   key: url
                   name: odoo-credentials
-          image: ghcr.io/appuio/control-api:v0.27.0
+          image: ghcr.io/appuio/control-api:v0.27.1
           name: apiserver
           ports:
             - containerPort: 9443
