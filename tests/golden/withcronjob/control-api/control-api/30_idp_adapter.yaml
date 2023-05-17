@@ -127,6 +127,12 @@ rules:
       - patch
       - update
   - apiGroups:
+      - rbac.appuio.io
+    resources:
+      - users
+    verbs:
+      - create
+  - apiGroups:
       - rbac.authorization.k8s.io
     resources:
       - rolebindings
@@ -262,7 +268,7 @@ spec:
                 secretKeyRef:
                   key: password
                   name: keycloak-user
-          image: ghcr.io/vshn/appuio-keycloak-adapter:v0.6.0
+          image: ghcr.io/vshn/appuio-keycloak-adapter:v0.6.1
           imagePullPolicy: IfNotPresent
           name: controller
           ports: []
