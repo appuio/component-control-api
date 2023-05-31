@@ -1,12 +1,12 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: example-zone-1-cloud-agent
+  name: extra-zone-cloud-agent
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: example-zone-1-cloud-agent
+  name: extra-zone-cloud-agent
 subjects:
 - kind: ServiceAccount
-  name: example-zone-1-cloud-agent
+  name: extra-zone-cloud-agent
   namespace: default

@@ -102,6 +102,10 @@ parameters:
             region: region1
       example-zone-2: {}
 
+    zone_agent_service_accounts:
+      - ~example-zone-1
+      - extra-zone
+
     idp_adapter:
       enabled: true
       args:

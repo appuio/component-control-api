@@ -7,6 +7,8 @@ parameters:
 
     zones: {}
 
+    zone_agent_service_accounts: []
+
     odoo8:
       countries:
         Austria:

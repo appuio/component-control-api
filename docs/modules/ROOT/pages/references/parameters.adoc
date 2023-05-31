@@ -160,6 +160,18 @@ parameters:
 ----
 ====
 
+== `zone_agent_service_accounts`
+
+[horizontal]
+type:: list(string)
+default:: `[]`
+
+Allows adding additional ServiceAccounts for zones that should not be shown in the portal.
+
+The list is appended to `keys(zones)`.
+Entries can be removed by prefixing them with `~`.
+
+
 == `cluster_admin_impersonation.oidc_administrator_role`
 
 [horizontal]
