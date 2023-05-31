@@ -1,4 +1,5 @@
 local common = import 'common.libsonnet';
+local com = import 'lib/commodore.libjsonnet';
 local kap = import 'lib/kapitan.libjsonnet';
 local inv = kap.inventory();
 local params = inv.parameters.control_api;
@@ -22,6 +23,6 @@ std.foldl(
       },
     }
   ,
-  std.filter(function(name) name != null, std.objectFields(params.zones)),
+  std.filter(function(name) name != null, com.renderArray(std.objectFields(params.zones) + params.zone_agent_service_accounts)),
   {}
 )
