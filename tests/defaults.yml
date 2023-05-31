@@ -106,6 +106,56 @@ parameters:
       - ~example-zone-1
       - extra-zone
 
+    usage_profiles:
+      example:
+        spec:
+          namespaceCount: 25
+          resources:
+            deny-egress-tcp-25:
+              apiVersion: networking.k8s.io/v1
+              kind: NetworkPolicy
+              metadata:
+                annotations:
+                  description: Deny egress traffic to all hosts on ports 25
+              spec:
+                egress:
+                  - ports:
+                      - port: 25
+                        protocol: TCP
+                    to:
+                      - ipBlock:
+                          cidr: 0.0.0.0/0
+                    podSelector: {}
+                    policyTypes:
+                      - Egress
+            organization-compute:
+              apiVersion: v1
+              kind: ResourceQuota
+              spec:
+                hard:
+                  limits.cpu: "8"
+                  limits.memory: 20Gi
+                  pods: "45"
+                  requests.cpu: "4"
+                  requests.memory: 4Gi
+                scopes:
+                  - NotTerminating
+            organization-compute-terminating:
+              apiVersion: v1
+              kind: ResourceQuota
+              metadata:
+                labels:
+                  foo: bar
+              spec:
+                hard:
+                  limits.cpu: "4"
+                  limits.memory: 4Gi
+                  pods: "5"
+                  requests.cpu: 500m
+                  requests.memory: 2Gi
+                scopes:
+                  - Terminating
+
     idp_adapter:
       enabled: true
       args:

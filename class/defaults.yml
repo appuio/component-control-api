@@ -9,6 +9,8 @@ parameters:
 
     zone_agent_service_accounts: []
 
+    usage_profiles: {}
+
     odoo8:
       countries:
         Austria:
@@ -177,4 +179,4 @@ parameters:
       appuio-cloud-agent:
         registry: ghcr.io
         image: appuio/cloud-agent
-        tag: usage-profiles
+        tag: v0.10.0

@@ -172,6 +172,47 @@ The list is appended to `keys(zones)`.
 Entries can be removed by prefixing them with `~`.
 
 
+== `usage_profiles`
+
+[horizontal]
+type:: dict
+default:: `{}`
+example::
++
+[source,yaml]
+----
+usage_profiles:
+  example:
+    spec:
+      namespaceCount: 25
+      resources:
+        deny-egress-tcp-25:
+          apiVersion: networking.k8s.io/v1
+          kind: NetworkPolicy
+          metadata:
+            annotations:
+              description: Deny egress traffic to all hosts on ports 25
+          spec:
+            egress:
+            - ports:
+              - port: 25
+                protocol: TCP
+              to:
+              - ipBlock:
+                  cidr: 0.0.0.0/0
+            podSelector: {}
+            policyTypes:
+            - Egress
+----
+
+Deploys UsageProfile definitions to the control-api.
+
+Each subkey of `usage_profiles` results in the resource's `metadata.name` and contains an object that's an `appuio.io/v1/UsageProfile` spec verbatim.
+
+Usage profiles are used to define resource limits and quotas for organizations.
+You can read more about usage profiles in the https://kb.vshn.ch/appuio-cloud/references/architecture/control-api-usage-profile.html[documentation].
+
+
 == `cluster_admin_impersonation.oidc_administrator_role`
 
 [horizontal]
