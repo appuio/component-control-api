@@ -27,4 +27,13 @@ local inv = kap.inventory();
       cloudProvider: {},
     },
   },
+
+  /**
+  * \brief `UsageProfile` creates a UsageProfile definition, defining certain workload limits and quotas for zones.
+  *
+  * \arg `name` The metadata name of the resource.
+  *
+  * The return value of UsageProfile shall be merged with custom data.
+  */
+  UsageProfile(name): kube._Object('appuio.io/v1', 'UsageProfile', name),
 }
