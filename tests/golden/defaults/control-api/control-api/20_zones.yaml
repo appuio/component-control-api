@@ -25,3 +25,22 @@ metadata:
     app.kubernetes.io/name: control-api
     name: example-zone-1
   name: example-zone-1
+---
+apiVersion: appuio.io/v1
+data:
+  cloudProvider: {}
+  cname: ''
+  defaultAppDomain: ''
+  displayName: example-zone-2
+  features: {}
+  gatewayIPs: []
+  urls: {}
+kind: Zone
+metadata:
+  annotations: {}
+  labels:
+    app.kubernetes.io/component: control-api
+    app.kubernetes.io/managed-by: commodore
+    app.kubernetes.io/name: control-api
+    name: example-zone-2
+  name: example-zone-2

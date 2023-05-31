@@ -125,8 +125,11 @@ default:: "?{vaultkv:${cluster:tenant}/${cluster:name}/${_instance}/apiserver-ke
 type:: dict
 default:: `{}`
 
-This key deploys static APPUiO Zone definitions.
+This key deploys static APPUiO Zone definitions and manages ServiceAccounts for the agent on the zones.
+
 Each subkey of `zones` results in the resource's `metadata.name` and contains an object that's an `appuio.io/v1/Zone` spec verbatim.
+The subkeys are also used to create a ServiceAccount adn RBAC for the agent on the zones in the form of `${subkey}-cloud-agent`.
+
 
 .Zone configuration
 [example]

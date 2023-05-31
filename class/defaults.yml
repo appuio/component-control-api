@@ -170,3 +170,9 @@ parameters:
         registry: ghcr.io
         image: vshn/appuio-keycloak-adapter
         tag: v0.6.1
+
+      # Image only used for renovate to pick up new manifests.
+      appuio-cloud-agent:
+        registry: ghcr.io
+        image: appuio/cloud-agent
+        tag: usage-profiles
