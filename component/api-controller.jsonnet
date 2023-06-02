@@ -103,6 +103,19 @@ local admissionWebhookService = common.LoadManifest('webhook/service.yaml') {
   },
 };
 
+local metricsService = common.LoadManifest('deployment/controller/metrics-service.yaml') {
+  metadata+: {
+    namespace: params.namespace,
+  },
+  spec+: {
+    ports: [
+      super.ports[0] {
+        name: 'metrics',
+      },
+    ],
+  },
+};
+
 {
   '01_role': role,
   '01_leader_election_role': leaderElectionRole,
@@ -142,4 +155,5 @@ local admissionWebhookService = common.LoadManifest('webhook/service.yaml') {
   '10_webhook_cert_secret': admissionWebhookTlsSecret,
   '10_webhook_config': admissionWebhook,
   '11_webhook_service': admissionWebhookService,
+  '12_metrics_service': metricsService,
 }

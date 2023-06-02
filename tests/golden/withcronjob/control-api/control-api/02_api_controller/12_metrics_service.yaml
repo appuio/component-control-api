@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: control-api-controller
+  name: control-api-controller-metrics
+  namespace: appuio-control-api
+spec:
+  ports:
+    - name: metrics
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: control-api-controller
+  type: ClusterIP
