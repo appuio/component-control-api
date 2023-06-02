@@ -145,6 +145,9 @@ local deployment = common.LoadManifest('deployment/apiserver/deployment.yaml') {
 local service = common.LoadManifest('deployment/apiserver/service.yaml') {
   metadata+: {
     namespace: params.namespace,
+    labels+: {
+      name: $.metadata.name,
+    },
   },
   spec+: {
     selector: deployment.spec.selector.matchLabels,
