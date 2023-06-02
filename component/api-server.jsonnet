@@ -185,6 +185,35 @@ local apiServices =
     common.LoadManifestStream('deployment/apiserver/apiservice.yaml')
   );
 
+local metricsRbac =
+  local sa = kube.ServiceAccount('metrics') {
+    metadata+: {
+      namespace: params.namespace,
+    },
+  };
+  [
+    sa,
+    kube.Secret(sa.metadata.name) {
+      metadata+: {
+        annotations+: {
+          'kubernetes.io/service-account.name': sa.metadata.name,
+          'vcluster.loft.sh/force-sync': 'true',
+        },
+        namespace: params.namespace,
+      },
+      type: 'kubernetes.io/service-account-token',
+      data:: {},
+    },
+    kube.ClusterRoleBinding(sa.metadata.name) {
+      roleRef: {
+        apiGroup: 'rbac.authorization.k8s.io',
+        kind: 'ClusterRole',
+        name: 'system:monitoring',
+      },
+      subjects_: [ sa ],
+    },
+  ];
+
 {
   '01_role': role,
   '01_role_binding': kube.ClusterRoleBinding(role.metadata.name) {
@@ -216,4 +245,5 @@ local apiServices =
   [if certSecret != null then '02_certs']: certSecret,
   '02_service': service,
   '02_apiservice': apiServices,
+  '03_api_metrics_rbac': metricsRbac,
 }
