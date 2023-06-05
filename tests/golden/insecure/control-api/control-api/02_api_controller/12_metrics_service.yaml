@@ -3,6 +3,7 @@ kind: Service
 metadata:
   labels:
     app: control-api-controller
+    name: control-api-controller-metrics
   name: control-api-controller-metrics
   namespace: appuio-control-api
 spec:

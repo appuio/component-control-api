@@ -106,6 +106,9 @@ local admissionWebhookService = common.LoadManifest('webhook/service.yaml') {
 local metricsService = common.LoadManifest('deployment/controller/metrics-service.yaml') {
   metadata+: {
     namespace: params.namespace,
+    labels+: {
+      name: $.metadata.name,
+    },
   },
   spec+: {
     ports: [
