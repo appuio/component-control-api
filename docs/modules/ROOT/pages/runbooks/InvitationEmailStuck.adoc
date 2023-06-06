@@ -1,4 +1,4 @@
-= Alert rule: PatchReconcileErrors
+= Alert rule: InvitationEmailStuck
 
 include::partial$runbooks/contribution_note.adoc[]
 
