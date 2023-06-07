@@ -1,0 +1,39 @@
+= Alert rule: ManyBillingEntitiesCreated
+
+include::partial$runbooks/contribution_note.adoc[]
+
+== icon:glasses[] Overview
+
+This alert fires if many BillingEntities have been created.
+This is usually the case if someone tries to abuse APPUiO Cloud.
+
+== icon:bug[] Steps for debugging
+
+
+=== Check the newly created BillingEntities
+
+.List all billing entities created less than 30 minutes ago
+[source,shell]
+----
+start=$(date -u -d '30 min ago' '+%Y-%m-%dT%H:%m:%SZ') <1>
+kubectl get billingentities -ojson | jq --arg start $start -r \
+  '.items[] |
+  select(.metadata.creationTimestamp|fromdateiso8601 >= ($start|fromdateiso8601)) |
+  "\(.metadata.name) \(.spec.name) \(.spec.accountingContact.name)"'
+----
+<1> Adjust the `30 min ago` part to be a longer or shorter time frame depending on your needs.
+
+Check the billing entities which are returned for suspicious patterns, such as identical names, addresses, or phone numbers.
+Check whether the addresses and names look made up.
+Check with your company's sales representatives whether they expect a number of new billing entities.
+
+== icon:wrench[] Follow-up actions
+
+=== Billing entities look legitimate
+
+Check if the APPUiO Cloud zones have sufficient resources to accommodate workloads for the new Billing Entities
+
+
+=== Billing entities look suspicious
+
+Contact your company's fraud prevention or security officer to determine next steps
