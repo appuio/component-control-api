@@ -268,7 +268,7 @@ spec:
                 secretKeyRef:
                   key: password
                   name: keycloak-user
-          image: ghcr.io/vshn/appuio-keycloak-adapter:v0.6.1
+          image: ghcr.io/vshn/appuio-keycloak-adapter:v0.7.0
           imagePullPolicy: IfNotPresent
           name: controller
           ports: []
