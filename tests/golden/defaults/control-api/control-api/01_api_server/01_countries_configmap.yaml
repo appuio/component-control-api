@@ -1,6 +1,9 @@
 apiVersion: v1
 data:
   billing_entity_odoo8_country_list.yaml: |-
+    - "code": "CH"
+      "id": 44
+      "name": ""
     - "code": "AT"
       "id": 13
       "name": "Austria"
@@ -97,9 +100,6 @@ data:
     - "code": "US"
       "id": 235
       "name": "United States"
-    - "code": "CH"
-      "id": 44
-      "name": ""
 kind: ConfigMap
 metadata:
   annotations: {}

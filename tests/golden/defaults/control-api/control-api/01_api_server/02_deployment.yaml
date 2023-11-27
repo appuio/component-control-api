@@ -13,7 +13,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/countries: 3d77fba4c0d674be0911de6ec943c0f6
+        checksum/countries: 49d20409af18c4c3dd43af7ee501778a
       labels:
         app: control-api-apiserver
     spec:
