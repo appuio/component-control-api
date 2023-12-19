@@ -167,7 +167,7 @@ parameters:
       control-api:
         registry: ghcr.io
         image: appuio/control-api
-        tag: v0.30.0
+        tag: v0.31.0
 
       idp-adapter:
         registry: ghcr.io
