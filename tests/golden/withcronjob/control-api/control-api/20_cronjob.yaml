@@ -28,7 +28,7 @@ spec:
                     secretKeyRef:
                       key: url
                       name: odoo-credentials
-              image: ghcr.io/appuio/control-api:v0.31.0
+              image: ghcr.io/appuio/control-api:v0.32.0
               imagePullPolicy: IfNotPresent
               name: cleanup
               ports: []
