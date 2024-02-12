@@ -22,7 +22,7 @@ spec:
             - --username-prefix=appuio#
             - --webhook-cert-dir=/var/run/webhook-service-tls
           env: []
-          image: ghcr.io/appuio/control-api:v0.32.1
+          image: ghcr.io/appuio/control-api:v0.33.0
           name: controller
           ports:
             - containerPort: 9443
