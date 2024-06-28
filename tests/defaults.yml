@@ -8,6 +8,11 @@ parameters:
             key: url
       extraArgs:
         - --cluster-roles=control-api:organization-viewer,control-api:organization-admin,control-api:organization-test
+      resources:
+        requests:
+          memory: 256Mi
+        limits:
+          memory: 1Gi
       tls:
         serverCert: |-
           -----BEGIN CERTIFICATE-----
@@ -45,6 +50,11 @@ parameters:
     controller:
       extraArgs:
         - --member-roles=admin
+      resources:
+        requests:
+          cpu: 150m
+        limits:
+          cpu: 300m
       webhookTls:
         caCertificate: ${control_api:controller:webhookTls:certificate}
         certificate: |-
