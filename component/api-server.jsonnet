@@ -97,6 +97,7 @@ local deployment = common.LoadManifest('deployment/apiserver/deployment.yaml') {
                 image: '%(registry)s/%(image)s:%(tag)s' % params.images['control-api'],
                 args: [ super.args[0] ] + common.MergeArgs(common.MergeArgs(super.args[1:], extraDeploymentArgs), params.apiserver.extraArgs),
                 env+: com.envList(params.apiserver.extraEnv),
+                resources+: com.makeMergeable(params.apiserver.resources),
                 volumeMounts+:
                   if hasCountriesConfig then
                     [ {
