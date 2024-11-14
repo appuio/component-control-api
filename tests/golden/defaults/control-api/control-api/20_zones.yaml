@@ -23,6 +23,7 @@ metadata:
     app.kubernetes.io/component: control-api
     app.kubernetes.io/managed-by: commodore
     app.kubernetes.io/name: control-api
+    control.appuio.io/zone-cluster-id: c-appuio-example1
     name: example-zone-1
   name: example-zone-1
 ---

@@ -93,6 +93,9 @@ parameters:
 
     zones:
       example-zone-1:
+        metadata:
+          labels:
+            control.appuio.io/zone-cluster-id: c-appuio-example1
         data:
           displayName: Example Zone 1
           features:
