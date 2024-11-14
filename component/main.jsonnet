@@ -10,7 +10,8 @@ local params = inv.parameters.control_api;
 
 
 local zones = [
-  controlApi.Zone(name) + params.zones[name] {
+  controlApi.Zone(name) +
+  com.makeMergeable(params.zones[name]) {
     metadata+: {
       labels+: common.DefaultLabels,
     },
