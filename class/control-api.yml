@@ -33,25 +33,28 @@ parameters:
       #   input_type: jsonnet
       #   output_path: control-api/02_api_controller/
 
-      # - input_paths:
-      #     - control-api/crds/${control_api:images:control-api:tag}/
-      #   output_path: control-api/
-      #   input_type: copy
-      #   output_type: yaml
-
+      - input_paths:
+          - control-api/crds/${control_api:images:control-api:tag}/
+        output_path: control-api/
+        input_type: copy
+        output_type: yaml
       - input_paths:
           - ${_base_directory}/component/control-api.jsonnet
         input_type: jsonnet
-        output_path: ${_base_directory}/control-api
+        output_path: ${_base_directory}/manifests/control-api
         output_type: yaml
       - input_type: external
         output_path: .
         input_paths:
           - ${_kustomize_wrapper}
         env_vars:
-          INPUT_DIR: ${_base_directory}/control-api
+          INPUT_DIR: ${_base_directory}/manifests/control-api
         args:
-          - \${compiled_target_dir}/control-api/10_kustomize
+          - \${compiled_target_dir}/control-api/20_kustomize
+      - input_paths:
+          - control-api/component/webhook.jsonnet
+        input_type: jsonnet
+        output_path: control-api/30_webhook/
 
       # Rendering the cloud agent rbac and service accounts using kustomize manifests from the agent repo.
       # - input_paths:
