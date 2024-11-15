@@ -179,5 +179,5 @@ parameters:
       # Image only used for renovate to pick up new manifests.
       appuio-cloud-agent:
         registry: ghcr.io
-        image: appuio/cloud-agent
-        tag: v0.12.1
+        image: appuio/appuio-cloud-agent
+        tag: v0.20.2
