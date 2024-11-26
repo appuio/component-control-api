@@ -3,7 +3,6 @@ kind: ClusterRoleBinding
 metadata:
   labels:
     app.kubernetes.io/managed-by: commodore
-    name: control-api-apiserver
   name: control-api-apiserver
 roleRef:
   apiGroup: rbac.authorization.k8s.io

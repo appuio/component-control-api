@@ -1,0 +1,27 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  name: extra-zone-cloud-agent
+rules:
+- apiGroups:
+  - appuio.io
+  resources:
+  - usageprofiles
+  - users
+  - teams
+  - organizationmembers
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - appuio.io
+  resources:
+  - teams
+  - teams/finalizers
+  - organizationmembers
+  - organizationmembers/finalizers
+  verbs:
+  - update
+  - patch

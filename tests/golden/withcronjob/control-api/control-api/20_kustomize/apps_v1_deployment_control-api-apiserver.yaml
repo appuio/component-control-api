@@ -32,7 +32,7 @@ spec:
         - --billing-entity-odoo8-country-list=/config/billing_entity_odoo8_country_list.yaml
         - --cluster-roles=control-api:organization-viewer,control-api:organization-admin,control-api:organization-test
         env:
-          name: ODOO_PASSWORD
+        - name: ODOO_PASSWORD
           valueFrom:
             secretKeyRef:
               key: url
@@ -44,10 +44,10 @@ spec:
         resources:
           limits:
             cpu: 300m
-            memory: 1Gi
+            memory: 100Mi
           requests:
             cpu: 100m
-            memory: 256Mi
+            memory: 200Mi
         volumeMounts:
         - mountPath: /apiserver.local.config/certificates
           name: apiserver-certs
@@ -57,8 +57,9 @@ spec:
           subPath: billing_entity_odoo8_country_list.yaml
       serviceAccountName: control-api-apiserver
       volumes:
-      - emptyDir: {}
-        name: apiserver-certs
+      - name: apiserver-certs
+        secret:
+          secretName: control-api-tls
       - configMap:
           name: billing-entity-odoo8-country-list
         name: countries-config

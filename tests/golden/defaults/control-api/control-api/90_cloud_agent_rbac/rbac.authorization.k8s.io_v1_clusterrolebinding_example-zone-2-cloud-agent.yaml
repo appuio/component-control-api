@@ -1,14 +1,12 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  labels:
-    app.kubernetes.io/managed-by: commodore
-  name: control-api-apiserver
+  name: example-zone-2-cloud-agent
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: control-api-apiserver
+  name: example-zone-2-cloud-agent
 subjects:
 - kind: ServiceAccount
-  name: control-api-apiserver
-  namespace: appuio-control-api
+  name: example-zone-2-cloud-agent
+  namespace: default

@@ -4,7 +4,7 @@ metadata:
   labels:
     app: control-api-controller
     app.kubernetes.io/managed-by: commodore
-    name: control-api-controller-metrics
+    name: control-api-controller
   name: control-api-controller-metrics
   namespace: appuio-control-api
 spec:
