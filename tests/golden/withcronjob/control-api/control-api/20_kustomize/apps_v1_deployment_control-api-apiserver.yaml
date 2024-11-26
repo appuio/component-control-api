@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: control-api-apiserver
+    app.kubernetes.io/managed-by: commodore
+  name: control-api-apiserver
+  namespace: appuio-control-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: control-api-apiserver
+  template:
+    metadata:
+      annotations:
+        checksum/countries: 49d20409af18c4c3dd43af7ee501778a
+      labels:
+        app: control-api-apiserver
+    spec:
+      containers:
+      - args:
+        - api
+        - --cert-dir=/apiserver.local.config/certificates
+        - --secure-port=9443
+        - --feature-gates=APIPriorityAndFairness=false
+        - --cluster-roles=control-api:organization-viewer,control-api:organization-admin
+        - --username-prefix=appuio#
+        - --invitation-storage-backing-ns=appuio-control-api-invitations
+        - --tls-cert-file=/apiserver.local.config/certificates/tls.crt
+        - --tls-private-key-file=/apiserver.local.config/certificates/tls.key
+        - --billing-entity-odoo8-country-list=/config/billing_entity_odoo8_country_list.yaml
+        - --cluster-roles=control-api:organization-viewer,control-api:organization-admin,control-api:organization-test
+        env:
+          name: ODOO_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: url
+              name: odoo-credentials
+        image: ghcr.io/appuio/control-api:v0.33.4
+        name: apiserver
+        ports:
+        - containerPort: 9443
+        resources:
+          limits:
+            cpu: 300m
+            memory: 1Gi
+          requests:
+            cpu: 100m
+            memory: 256Mi
+        volumeMounts:
+        - mountPath: /apiserver.local.config/certificates
+          name: apiserver-certs
+        - mountPath: /config/billing_entity_odoo8_country_list.yaml
+          name: countries-config
+          readOnly: true
+          subPath: billing_entity_odoo8_country_list.yaml
+      serviceAccountName: control-api-apiserver
+      volumes:
+      - emptyDir: {}
+        name: apiserver-certs
+      - configMap:
+          name: billing-entity-odoo8-country-list
+        name: countries-config

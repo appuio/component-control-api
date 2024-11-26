@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: control-api-apiserver
+    app.kubernetes.io/managed-by: commodore
+  name: control-api-apiserver
+  namespace: appuio-control-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: control-api-apiserver
+  template:
+    metadata:
+      labels:
+        app: control-api-apiserver
+    spec:
+      containers:
+      - args:
+        - api
+        - --cert-dir=/apiserver.local.config/certificates
+        - --secure-port=9443
+        - --feature-gates=APIPriorityAndFairness=false
+        - --cluster-roles=control-api:organization-viewer,control-api:organization-admin
+        - --username-prefix=appuio#
+        - --invitation-storage-backing-ns=appuio-control-api-invitations
+        image: ghcr.io/appuio/control-api:v0.33.4
+        name: apiserver
+        ports:
+        - containerPort: 9443
+        resources:
+          limits:
+            cpu: 300m
+            memory: 1Gi
+          requests:
+            cpu: 100m
+            memory: 256Mi
+        volumeMounts:
+        - mountPath: /apiserver.local.config/certificates
+          name: apiserver-certs
+      serviceAccountName: control-api-apiserver
+      volumes:
+      - emptyDir: {}
+        name: apiserver-certs
