@@ -137,7 +137,7 @@ local apiserverDeploymentResourcesPatch = {
       patch: std.format(|||
         - op: add
           path: /spec/template/spec/containers/0/resources
-          value: 
+          value:
             %s
       |||, std.manifestJson(apiserverDeploymentResources)),
       target: {
@@ -154,7 +154,7 @@ local apiserverDeploymentVolumesPatch = if validCertSecret then {
       patch: std.format(|||
         - op: replace
           path: /spec/template/spec/volumes/0
-          value: 
+          value:
             name: apiserver-certs
             secret:
               secretName: %s
@@ -297,7 +297,7 @@ local controllerDeploymentVolumeMountsPatch = {
           value: []
         - op: add
           path: "/spec/template/spec/containers/0/volumeMounts/-"
-          value: 
+          value:
             mountPath: /var/run/webhook-service-tls
             name: webhook-service-tls
             readOnly: true
