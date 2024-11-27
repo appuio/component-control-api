@@ -64,9 +64,9 @@ local apiserverDeploymentArgsPatch = {
       |||, arg),
       target: {
         kind: 'Deployment',
-        name: 'control-api-apiserver'
+        name: 'control-api-apiserver',
       },
-    },
+    }
     for arg in apiserverDeploymentArgs
   ],
 };
@@ -95,7 +95,7 @@ local apiserverOdooConfigPatch = if hasCountriesConfig then {
       |||, std.md5(countries_yaml)),
       target: {
         kind: 'Deployment',
-        name: 'control-api-apiserver'
+        name: 'control-api-apiserver',
       },
     },
   ],
@@ -115,21 +115,21 @@ local apiserverDeploymentEnvPatch = if std.length(apiserverExtraEnvList) > 0 the
       |||, apiserverExtraEnvList),
       target: {
         kind: 'Deployment',
-        name: 'control-api-apiserver'
+        name: 'control-api-apiserver',
       },
     },
   ],
 } else {};
 
 local apiserverDeploymentResources = std.mergePatch({
-  limits:{
-    cpu: "300m",
-    memory: "100Mi"
-  }, 
-  requests:{
-    cpu: "100m",
-    memory: "200Mi"
-  }
+  limits: {
+    cpu: '300m',
+    memory: '100Mi',
+  },
+  requests: {
+    cpu: '100m',
+    memory: '200Mi',
+  },
 }, params.apiserver.resources);
 local apiserverDeploymentResourcesPatch = {
   patches+: [
@@ -142,7 +142,7 @@ local apiserverDeploymentResourcesPatch = {
       |||, std.manifestJson(apiserverDeploymentResources)),
       target: {
         kind: 'Deployment',
-        name: 'control-api-apiserver'
+        name: 'control-api-apiserver',
       },
     },
   ],
@@ -161,24 +161,24 @@ local apiserverDeploymentVolumesPatch = if validCertSecret then {
       |||, params.apiserver.tls.certSecretName),
       target: {
         kind: 'Deployment',
-        name: 'control-api-apiserver'
+        name: 'control-api-apiserver',
       },
     },
   ],
 } else {};
 
 local apiserverDeploymentPatch = apiserverDeploymentArgsPatch
-                                  + apiserverDeploymentEnvPatch
-                                  + apiserverDeploymentResourcesPatch
-                                  + apiserverOdooConfigPatch
-                                  + apiserverDeploymentVolumesPatch;
+                                 + apiserverDeploymentEnvPatch
+                                 + apiserverDeploymentResourcesPatch
+                                 + apiserverOdooConfigPatch
+                                 + apiserverDeploymentVolumesPatch;
 
 local apiserverRoleBindingPatch = patches.LabelPatch('Service', 'control-api-apiserver', std.toString({
-  name: 'control-api-apiserver'
+  name: 'control-api-apiserver',
 }));
 
 local apiserverServicePatch = patches.LabelPatch('Service', 'control-api-apiserver', std.toString({
-  name: 'control-api-apiserver'
+  name: 'control-api-apiserver',
 }));
 
 /////////////////
@@ -193,12 +193,12 @@ local validAdmissionWebhookTlsSecret =
 ;
 
 local controllerDeploymentArgs =
-  (if validAdmissionWebhookTlsSecret then 
-    [
-      '--webhook-cert-dir=' + webhookCertDir,
-    ]
-  else 
-    [])
+  (if validAdmissionWebhookTlsSecret then
+     [
+       '--webhook-cert-dir=' + webhookCertDir,
+     ]
+   else
+     [])
   +
   params.controller.extraArgs
 ;
@@ -213,9 +213,9 @@ local controllerDeploymentArgPatches = {
       |||, arg),
       target: {
         kind: 'Deployment',
-        name: 'control-api-controller'
+        name: 'control-api-controller',
       },
-    },
+    }
     for arg in controllerDeploymentArgs
   ],
 };
@@ -234,7 +234,7 @@ local controllerDeploymentEnvPatch = if std.length(controllerExtraEnvList) > 0 t
       |||, controllerExtraEnvList),
       target: {
         kind: 'Deployment',
-        name: 'control-api-controller'
+        name: 'control-api-controller',
       },
     },
   ],
@@ -256,21 +256,21 @@ local controllerDeploymentVolumePatch = {
       |||,
       target: {
         kind: 'Deployment',
-        name: 'control-api-controller'
+        name: 'control-api-controller',
       },
     },
   ],
 };
 
 local controllerDeploymentResources = std.mergePatch({
-  limits:{
-    cpu: "300m",
-    memory: "200Mi"
-  }, 
-  requests:{
-    cpu: "150m",
-    memory: "100Mi"
-  }
+  limits: {
+    cpu: '300m',
+    memory: '200Mi',
+  },
+  requests: {
+    cpu: '150m',
+    memory: '100Mi',
+  },
 }, params.controller.resources);
 local controllerDeploymentResourcesPatch = {
   patches+: [
@@ -282,7 +282,7 @@ local controllerDeploymentResourcesPatch = {
       |||, std.manifestJson(controllerDeploymentResources)),
       target: {
         kind: 'Deployment',
-        name: 'control-api-controller'
+        name: 'control-api-controller',
       },
     },
   ],
@@ -304,7 +304,7 @@ local controllerDeploymentVolumeMountsPatch = {
       |||,
       target: {
         kind: 'Deployment',
-        name: 'control-api-controller'
+        name: 'control-api-controller',
       },
     },
   ],
@@ -317,13 +317,13 @@ local controllerDeploymentPatch = controllerDeploymentArgPatches
                                   + controllerDeploymentVolumePatch;
 
 local controllerRoleBindingPatch = patches.LabelPatch('ClusterRoleBinding', 'control-api-controller', std.toString({
-  name: 'control-api-controller'
+  name: 'control-api-controller',
 }));
 
 
 local controllerServicePatch = patches.LabelPatch('Service', 'control-api-controller-metrics', std.toString({
   app: 'control-api-controller',
-  name: 'control-api-controller'
+  name: 'control-api-controller',
 })) {
   patches+: [
     {
@@ -334,7 +334,7 @@ local controllerServicePatch = patches.LabelPatch('Service', 'control-api-contro
       |||,
       target: {
         kind: 'Service',
-        name: 'control-api-controller-metrics'
+        name: 'control-api-controller-metrics',
       },
     },
   ],
@@ -344,8 +344,8 @@ local controllerServicePatch = patches.LabelPatch('Service', 'control-api-contro
 // Misc
 
 local apiservicePatches = patches.ApiServicePatch('v1.organization.appuio.io', params.apiserver.apiservice.insecureSkipTLSVerify, params.apiserver.tls.serverCert)
-                            + patches.ApiServicePatch('v1.user.appuio.io', params.apiserver.apiservice.insecureSkipTLSVerify, params.apiserver.tls.serverCert)
-                            + patches.ApiServicePatch('v1.billing.appuio.io', params.apiserver.apiservice.insecureSkipTLSVerify, params.apiserver.tls.serverCert);
+                          + patches.ApiServicePatch('v1.user.appuio.io', params.apiserver.apiservice.insecureSkipTLSVerify, params.apiserver.tls.serverCert)
+                          + patches.ApiServicePatch('v1.billing.appuio.io', params.apiserver.apiservice.insecureSkipTLSVerify, params.apiserver.tls.serverCert);
 
 local kustomize_input = params.kustomize_input
                         + apiservicePatches
@@ -353,7 +353,7 @@ local kustomize_input = params.kustomize_input
                         + apiserverDeploymentPatch
                         + apiserverRoleBindingPatch
                         + apiserverServicePatch
-                        
+
                         + controllerDeploymentPatch
                         + controllerRoleBindingPatch
                         + controllerServicePatch;
@@ -376,7 +376,7 @@ com.Kustomization(
         },
       },
     ],
-    patchesStrategicMerge: ['rm-namespace.yaml'],
+    patchesStrategicMerge: [ 'rm-namespace.yaml' ],
   },
 ) {
   'rm-namespace': [
@@ -385,7 +385,7 @@ com.Kustomization(
       apiVersion: 'v1',
       kind: 'Namespace',
       metadata: {
-        name: 'control-api'
+        name: 'control-api',
       },
     },
   ],

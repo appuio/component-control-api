@@ -35,9 +35,9 @@
         |||, labels),
         target: {
           kind: kind,
-          name: name
+          name: name,
         },
       },
-    ],  
-  }
+    ],
+  },
 }
