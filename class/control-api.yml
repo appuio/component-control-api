@@ -24,15 +24,6 @@ parameters:
           - control-api/component/main.jsonnet
         input_type: jsonnet
         output_path: control-api/
-      # - input_paths:
-      #     - control-api/component/api-server.jsonnet
-      #   input_type: jsonnet
-      #   output_path: control-api/01_api_server/
-      # - input_paths:
-      #     - control-api/component/api-controller.jsonnet
-      #   input_type: jsonnet
-      #   output_path: control-api/02_api_controller/
-
       - input_paths:
           - control-api/crds/${control_api:images:control-api:tag}/
         output_path: control-api/
@@ -60,17 +51,13 @@ parameters:
       - input_paths:
           - ${_base_directory}/component/cloud-agent-rbac.jsonnet
         input_type: jsonnet
-        output_path: ${_base_directory}/cloud-agent-rbac
+        output_path: ${_base_directory}/manifests/cloud-agent-rbac
         output_type: yaml
       - input_type: external
         output_path: .
         input_paths:
           - ${_kustomize_wrapper}
         env_vars:
-          INPUT_DIR: ${_base_directory}/cloud-agent-rbac
+          INPUT_DIR: ${_base_directory}/manifests/cloud-agent-rbac
         args:
           - \${compiled_target_dir}/control-api/90_cloud_agent_rbac
-      - input_paths:
-          - ${_base_directory}/cloud-agent-rbac
-        input_type: remove
-        output_path: .

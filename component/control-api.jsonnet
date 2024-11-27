@@ -367,6 +367,11 @@ com.Kustomization(
       newTag: image.tag,
       newName: '%(registry)s/%(image)s' % image,
     },
+    'ghcr.io/vshn/appuio-keycloak-adapter': {
+      local image = params.images['idp-adapter'],
+      newTag: image.tag,
+      newName: '%(registry)s/%(image)s' % image,
+    },
   },
   kustomize_input {
     labels+: [
