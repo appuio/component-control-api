@@ -1,0 +1,16 @@
+apiVersion: apiregistration.k8s.io/v1
+kind: APIService
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: commodore
+  name: v1.billing.appuio.io
+spec:
+  caBundle: null
+  group: billing.appuio.io
+  groupPriorityMinimum: 1000
+  insecureSkipTLSVerify: true
+  service:
+    name: control-api-apiserver
+    namespace: appuio-control-api
+  version: v1
+  versionPriority: 15

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: commodore
+    name: control-api-apiserver
+  name: control-api-apiserver
+  namespace: appuio-control-api
+spec:
+  ports:
+  - port: 443
+    protocol: TCP
+    targetPort: 9443
+  selector:
+    app: control-api-apiserver

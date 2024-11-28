@@ -1,0 +1,262 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  labels:
+    app.kubernetes.io/managed-by: commodore
+  name: control-api-controller
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - patch
+- apiGroups:
+  - appuio.io
+  resources:
+  - organizationmembers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - appuio.io
+  resources:
+  - organizationmembers
+  - teams
+  verbs:
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - appuio.io
+  resources:
+  - organizationmembers/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - appuio.io
+  resources:
+  - teams
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - appuio.io
+  resources:
+  - users
+  verbs:
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - appuio.io
+  resources:
+  - users/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - authorization.k8s.io
+  resources:
+  - subjectaccessreviews
+  verbs:
+  - create
+- apiGroups:
+  - billing.appuio.io
+  resources:
+  - billingentities
+  verbs:
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - billing.appuio.io
+  resources:
+  - billingentities/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - billing.appuio.io
+  - rbac.appuio.io
+  resources:
+  - billingentities
+  verbs:
+  - '*'
+- apiGroups:
+  - organization.appuio.io
+  resources:
+  - organizations
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - organization.appuio.io
+  resources:
+  - organizations/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - rbac.appuio.io
+  resources:
+  - billingentities
+  verbs:
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - rbac.appuio.io
+  resources:
+  - billingentities/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - rbac.appuio.io
+  resources:
+  - invitations
+  verbs:
+  - delete
+  - get
+  - list
+  - watch
+- apiGroups:
+  - rbac.appuio.io
+  resources:
+  - invitations/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - rbac.appuio.io
+  resources:
+  - organizations
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - rbac.appuio.io
+  resources:
+  - organizations/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - rbac.appuio.io
+  resources:
+  - users
+  verbs:
+  - create
+  - patch
+  - update
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - clusterrolebindings
+  - clusterroles
+  verbs:
+  - create
+  - delete
+  - edit
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - clusterrolebindings
+  - rolebindings
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - rolebindings
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - user.appuio.io
+  resources:
+  - invitations
+  verbs:
+  - delete
+  - get
+  - list
+  - watch
+- apiGroups:
+  - user.appuio.io
+  resources:
+  - invitations/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - user.appuio.io
+  resources:
+  - organizations
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - user.appuio.io
+  resources:
+  - organizations/status
+  verbs:
+  - get
+  - patch
+  - update
