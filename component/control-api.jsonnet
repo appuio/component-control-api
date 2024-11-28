@@ -127,7 +127,7 @@ local apiserverDeploymentEnvPatch = if std.length(apiserverExtraEnvList) > 0 the
         name: 'control-api-apiserver',
 
       },
-    },
+    }
     for env in apiserverExtraEnvList
   ],
 } else {};
@@ -256,7 +256,7 @@ local controllerDeploymentEnvPatch = if std.length(controllerExtraEnvList) > 0 t
         kind: 'Deployment',
         name: 'control-api-controller',
       },
-    },
+    }
     for env in controllerExtraEnvList
   ],
 } else {};
