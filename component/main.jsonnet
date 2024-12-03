@@ -60,6 +60,35 @@ local certSecret =
   else
     null;
 
+local metricsRbac =
+  local sa = kube.ServiceAccount('metrics') {
+    metadata+: {
+      namespace: params.namespace,
+    },
+  };
+  [
+    sa,
+    kube.Secret(sa.metadata.name) {
+      metadata+: {
+        annotations+: {
+          'kubernetes.io/service-account.name': sa.metadata.name,
+          'vcluster.loft.sh/force-sync': 'true',
+        },
+        namespace: params.namespace,
+      },
+      type: 'kubernetes.io/service-account-token',
+      data:: {},
+    },
+    kube.ClusterRoleBinding(sa.metadata.name) {
+      roleRef: {
+        apiGroup: 'rbac.authorization.k8s.io',
+        kind: 'ClusterRole',
+        name: 'system:monitoring',
+      },
+      subjects_: [ sa ],
+    },
+  ];
+
 // Define outputs below
 {
   '00_namespace': [
@@ -68,6 +97,7 @@ local certSecret =
   ],
   [if hasCountriesConfig then '10_odoo_countrylist']: countriesConfigMap,
   [if certSecret != null then '10_certs']: certSecret,
+  '10_rbac_api_metrics': metricsRbac,
   '10_rbac_cluster_admin_impersonation': (import 'rbac-cluster-admin-impersonation.libsonnet'),
   '10_rbac_basic_user': (import 'rbac-basic-user.libsonnet'),
   '10_rbac_organization': (import 'rbac-organization.libsonnet'),
