@@ -1,6 +1,7 @@
 parameters:
   control_api:
-    =_metadata: {}
+    =_metadata:
+      multi_tenant: true
 
     namespace: appuio-control-api
     invitation_store_namespace: ${control_api:namespace}-invitations
