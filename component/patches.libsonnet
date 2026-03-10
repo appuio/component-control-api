@@ -1,6 +1,6 @@
 {
   ApiServicePatch(name, insecureSkipTLSVerify, caCert=null): {
-    patches+: [
+    patches+: std.prune([
       {
         patch: std.manifestJsonMinified([
           {
@@ -29,7 +29,7 @@
           name: name,
         },
       },
-    ],
+    ]),
   },
   LabelPatch(kind, name, labels): {
     patches+: [
