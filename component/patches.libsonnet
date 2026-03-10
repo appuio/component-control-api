@@ -1,5 +1,5 @@
 {
-  ApiServicePatch(name, insecureSkipTLSVerify, caCert=null): {
+  ApiServicePatch(name, insecureSkipTLSVerify, caCert=''): {
     patches+: std.prune([
       {
         patch: std.manifestJsonMinified([
@@ -18,7 +18,7 @@
           name: name,
         },
       },
-      if caCert != null then {
+      if std.length(caCert) > 0 then {
         patch: std.manifestJsonMinified([ {
           op: 'add',
           path: '/spec/caBundle',
