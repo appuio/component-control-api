@@ -135,11 +135,11 @@ local apiserverDeploymentEnvPatch = if std.length(apiserverExtraEnvList) > 0 the
 local apiserverDeploymentResources = std.mergePatch({
   limits: {
     cpu: '300m',
-    memory: '100Mi',
+    memory: '200Mi',
   },
   requests: {
     cpu: '100m',
-    memory: '200Mi',
+    memory: '100Mi',
   },
 }, params.apiserver.resources);
 local apiserverDeploymentResourcesPatch = {
