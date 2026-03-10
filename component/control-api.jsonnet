@@ -178,11 +178,12 @@ local apiserverDeploymentVolumesPatch = if validCertSecret then {
   ],
 } else {};
 
-local apiserverDeploymentPatch = apiserverDeploymentArgsPatch
-                                 + apiserverDeploymentEnvPatch
-                                 + apiserverDeploymentResourcesPatch
-                                 + apiserverOdooConfigPatch
-                                 + apiserverDeploymentVolumesPatch;
+local apiserverDeploymentPatch =
+  apiserverDeploymentArgsPatch
+  + apiserverDeploymentEnvPatch
+  + apiserverDeploymentResourcesPatch
+  + apiserverOdooConfigPatch
+  + apiserverDeploymentVolumesPatch;
 
 local apiserverRoleBindingPatch = patches.LabelPatch('Service', 'control-api-apiserver', std.toString({
   name: 'control-api-apiserver',
@@ -364,9 +365,10 @@ local controllerServicePatch = patches.LabelPatch('Service', 'control-api-contro
 ////////////////
 // Misc
 
-local apiservicePatches = patches.ApiServicePatch('v1.organization.appuio.io', params.apiserver.apiservice.insecureSkipTLSVerify, params.apiserver.tls.serverCert)
-                          + patches.ApiServicePatch('v1.user.appuio.io', params.apiserver.apiservice.insecureSkipTLSVerify, params.apiserver.tls.serverCert)
-                          + patches.ApiServicePatch('v1.billing.appuio.io', params.apiserver.apiservice.insecureSkipTLSVerify, params.apiserver.tls.serverCert);
+local apiservicePatches =
+  patches.ApiServicePatch('v1.organization.appuio.io', params.apiserver.apiservice.insecureSkipTLSVerify, params.apiserver.tls.serverCert)
+  + patches.ApiServicePatch('v1.user.appuio.io', params.apiserver.apiservice.insecureSkipTLSVerify, params.apiserver.tls.serverCert)
+  + patches.ApiServicePatch('v1.billing.appuio.io', params.apiserver.apiservice.insecureSkipTLSVerify, params.apiserver.tls.serverCert);
 
 local kustomize_input = params.kustomize_input
                         + apiservicePatches
