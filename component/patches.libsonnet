@@ -19,11 +19,11 @@
         },
       },
       if caCert != null then {
-        patch: std.format(|||
-          - op: add
-            path: /spec/caBundle
-            value: %s
-        |||, std.base64(caCert)),
+        patch: std.manifestJsonMinified([ {
+          op: 'add',
+          path: '/spec/caBundle',
+          value: std.base64(caCert),
+        } ]),
         target: {
           kind: 'APIService',
           name: name,
@@ -34,11 +34,11 @@
   LabelPatch(kind, name, labels): {
     patches+: [
       {
-        patch: std.format(|||
-          - op: add
-            path: /metadata/labels
-            value: %s
-        |||, labels),
+        patch: std.manifestJsonMinified([ {
+          op: 'add',
+          path: '/metadata/labels',
+          value: labels,
+        } ]),
         target: {
           kind: kind,
           name: name,
