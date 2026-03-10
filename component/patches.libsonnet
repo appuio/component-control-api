@@ -2,11 +2,17 @@
   ApiServicePatch(name, insecureSkipTLSVerify, caCert=null): {
     patches+: [
       {
-        patch: std.format(|||
-          - op: add
-            path: /spec/insecureSkipTLSVerify
-            value: %s
-        |||, insecureSkipTLSVerify),
+        patch: std.manifestJsonMinified([
+          {
+            path: '/spec/insecureSkipTLSVerify',
+          } +
+          if insecureSkipTLSVerify then {
+            op: 'add',
+            value: insecureSkipTLSVerify,
+          } else {
+            op: 'remove',
+          },
+        ]),
         target: {
           kind: 'APIService',
           name: name,
