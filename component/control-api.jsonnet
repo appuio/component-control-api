@@ -57,11 +57,11 @@ local apiserverDeploymentArgs =
 local apiserverDeploymentArgsPatch = {
   patches+: [
     {
-      patch: std.format(|||
-        - op: add
-          path: "/spec/template/spec/containers/0/args/-"
-          value: "%s"
-      |||, arg),
+      patch: std.manifestJsonMinified([ {
+        op: 'add',
+        path: '/spec/template/spec/containers/0/args/-',
+        value: arg,
+      } ]),
       target: {
         kind: 'Deployment',
         name: 'control-api-apiserver',
@@ -74,25 +74,35 @@ local apiserverDeploymentArgsPatch = {
 local apiserverOdooConfigPatch = if hasCountriesConfig then {
   patches+: [
     {
-      patch: std.format(|||
-        - op: add
-          path: /spec/template/spec/containers/0/volumeMounts/-
-          value:
-            mountPath: /config/billing_entity_odoo8_country_list.yaml
-            name: countries-config
-            readOnly: true
-            subPath: billing_entity_odoo8_country_list.yaml
-        - op: add
-          path: /spec/template/spec/volumes/-
-          value:
-            name: countries-config
-            configMap:
-              name: billing-entity-odoo8-country-list
-        - op: add
-          path: /spec/template/metadata/annotations
-          value:
-            'checksum/countries': %s
-      |||, std.md5(countries_yaml)),
+      patch: std.manifestJsonMinified([
+        {
+          op: 'add',
+          path: '/spec/template/spec/containers/0/volumeMounts/-',
+          value: {
+            mountPath: '/config/billing_entity_odoo8_country_list.yaml',
+            name: 'countries-config',
+            readOnly: true,
+            subPath: 'billing_entity_odoo8_country_list.yaml',
+          },
+        },
+        {
+          op: 'add',
+          path: '/spec/template/spec/volumes/-',
+          value: {
+            name: 'countries-config',
+            configMap: {
+              name: 'billing-entity-odoo8-country-list',
+            },
+          },
+        },
+        {
+          op: 'add',
+          path: '/spec/template/metadata/annotations',
+          value: {
+            'checksum/countries': std.md5(countries_yaml),
+          },
+        },
+      ]),
       target: {
         kind: 'Deployment',
         name: 'control-api-apiserver',
@@ -105,11 +115,11 @@ local apiserverExtraEnvList = com.envList(params.apiserver.extraEnv);
 local apiserverDeploymentEnvPatch = if std.length(apiserverExtraEnvList) > 0 then {
   patches+: [
     {
-      patch: |||
-        - op: add
-          path: /spec/template/spec/containers/0/env
-          value: []
-      |||,
+      patch: std.manifestJsonMinified([ {
+        op: 'add',
+        path: '/spec/template/spec/containers/0/env',
+        value: [],
+      } ]),
       target: {
         kind: 'Deployment',
         name: 'control-api-apiserver',
@@ -117,11 +127,11 @@ local apiserverDeploymentEnvPatch = if std.length(apiserverExtraEnvList) > 0 the
     },
   ] + [
     {
-      patch: std.format(|||
-        - op: add
-          path: /spec/template/spec/containers/0/env/-
-          value: %(value)s
-      |||, { value: env }),
+      patch: std.manifestJsonMinified([ {
+        op: 'add',
+        path: '/spec/template/spec/containers/0/env/-',
+        value: env,
+      } ]),
       target: {
         kind: 'Deployment',
         name: 'control-api-apiserver',
@@ -145,12 +155,11 @@ local apiserverDeploymentResources = std.mergePatch({
 local apiserverDeploymentResourcesPatch = {
   patches+: [
     {
-      patch: std.format(|||
-        - op: add
-          path: /spec/template/spec/containers/0/resources
-          value:
-            %s
-      |||, std.manifestJson(apiserverDeploymentResources)),
+      patch: std.manifestJsonMinified([ {
+        op: 'add',
+        path: '/spec/template/spec/containers/0/resources',
+        value: apiserverDeploymentResources,
+      } ]),
       target: {
         kind: 'Deployment',
         name: 'control-api-apiserver',
@@ -162,14 +171,16 @@ local apiserverDeploymentResourcesPatch = {
 local apiserverDeploymentVolumesPatch = if validCertSecret then {
   patches+: [
     {
-      patch: std.format(|||
-        - op: replace
-          path: /spec/template/spec/volumes/0
-          value:
-            name: apiserver-certs
-            secret:
-              secretName: %s
-      |||, params.apiserver.tls.certSecretName),
+      patch: std.manifestJsonMinified([ {
+        op: 'replace',
+        path: '/spec/template/spec/volumes/0',
+        value: {
+          name: 'apiserver-certs',
+          secret: {
+            secretName: params.apiserver.tls.certSecretName,
+          },
+        },
+      } ]),
       target: {
         kind: 'Deployment',
         name: 'control-api-apiserver',
@@ -178,19 +189,20 @@ local apiserverDeploymentVolumesPatch = if validCertSecret then {
   ],
 } else {};
 
-local apiserverDeploymentPatch = apiserverDeploymentArgsPatch
-                                 + apiserverDeploymentEnvPatch
-                                 + apiserverDeploymentResourcesPatch
-                                 + apiserverOdooConfigPatch
-                                 + apiserverDeploymentVolumesPatch;
+local apiserverDeploymentPatch =
+  apiserverDeploymentArgsPatch
+  + apiserverDeploymentEnvPatch
+  + apiserverDeploymentResourcesPatch
+  + apiserverOdooConfigPatch
+  + apiserverDeploymentVolumesPatch;
 
-local apiserverRoleBindingPatch = patches.LabelPatch('Service', 'control-api-apiserver', std.toString({
+local apiserverRoleBindingPatch = patches.LabelPatch('Service', 'control-api-apiserver', {
   name: 'control-api-apiserver',
-}));
+});
 
-local apiserverServicePatch = patches.LabelPatch('Service', 'control-api-apiserver', std.toString({
+local apiserverServicePatch = patches.LabelPatch('Service', 'control-api-apiserver', {
   name: 'control-api-apiserver',
-}));
+});
 
 /////////////////
 // Controller
@@ -217,11 +229,11 @@ local controllerDeploymentArgs =
 local controllerDeploymentArgPatches = {
   patches+: [
     {
-      patch: std.format(|||
-        - op: add
-          path: "/spec/template/spec/containers/0/args/-"
-          value: "%s"
-      |||, arg),
+      patch: std.manifestJsonMinified([ {
+        op: 'add',
+        path: '/spec/template/spec/containers/0/args/-',
+        value: arg,
+      } ]),
       target: {
         kind: 'Deployment',
         name: 'control-api-controller',
@@ -235,11 +247,11 @@ local controllerExtraEnvList = com.envList(params.controller.extraEnv);
 local controllerDeploymentEnvPatch = if std.length(controllerExtraEnvList) > 0 then {
   patches+: [
     {
-      patch: |||
-        - op: add
-          path: /spec/template/spec/containers/0/env
-          value: []
-      |||,
+      patch: std.manifestJsonMinified([ {
+        op: 'add',
+        path: '/spec/template/spec/containers/0/env',
+        value: [],
+      } ]),
       target: {
         kind: 'Deployment',
         name: 'control-api-controller',
@@ -247,11 +259,11 @@ local controllerDeploymentEnvPatch = if std.length(controllerExtraEnvList) > 0 t
     },
   ] + [
     {
-      patch: std.format(|||
-        - op: add
-          path: /spec/template/spec/containers/0/env/-
-          value: %(value)s
-      |||, { value: env }),
+      patch: std.manifestJsonMinified([ {
+        op: 'add',
+        path: '/spec/template/spec/containers/0/env/-',
+        value: env,
+      } ]),
       target: {
         kind: 'Deployment',
         name: 'control-api-controller',
@@ -264,17 +276,20 @@ local controllerDeploymentEnvPatch = if std.length(controllerExtraEnvList) > 0 t
 local controllerDeploymentVolumePatch = {
   patches+: [
     {
-      patch: |||
-        - op: add
-          path: "/spec/template/spec/volumes"
-          value: []
-        - op: add
-          path: "/spec/template/spec/volumes/-"
-          value:
-            name: webhook-service-tls
-            secret:
-              secretName: webhook-service-tls
-      |||,
+      patch: std.manifestJsonMinified([ {
+        op: 'add',
+        path: '/spec/template/spec/volumes',
+        value: [],
+      }, {
+        op: 'add',
+        path: '/spec/template/spec/volumes/-',
+        value: {
+          name: 'webhook-service-tls',
+          secret: {
+            secretName: 'webhook-service-tls',
+          },
+        },
+      } ]),
       target: {
         kind: 'Deployment',
         name: 'control-api-controller',
@@ -296,11 +311,11 @@ local controllerDeploymentResources = std.mergePatch({
 local controllerDeploymentResourcesPatch = {
   patches+: [
     {
-      patch: std.format(|||
-        - op: add
-          path: "/spec/template/spec/containers/0/resources"
-          value: %s
-      |||, std.manifestJson(controllerDeploymentResources)),
+      patch: std.manifestJsonMinified([ {
+        op: 'add',
+        path: '/spec/template/spec/containers/0/resources',
+        value: controllerDeploymentResources,
+      } ]),
       target: {
         kind: 'Deployment',
         name: 'control-api-controller',
@@ -312,17 +327,22 @@ local controllerDeploymentResourcesPatch = {
 local controllerDeploymentVolumeMountsPatch = {
   patches+: [
     {
-      patch: |||
-        - op: add
-          path: "/spec/template/spec/containers/0/volumeMounts"
-          value: []
-        - op: add
-          path: "/spec/template/spec/containers/0/volumeMounts/-"
-          value:
-            mountPath: /var/run/webhook-service-tls
-            name: webhook-service-tls
-            readOnly: true
-      |||,
+      patch: std.manifestJsonMinified([
+        {
+          op: 'add',
+          path: '/spec/template/spec/containers/0/volumeMounts',
+          value: [],
+        },
+        {
+          op: 'add',
+          path: '/spec/template/spec/containers/0/volumeMounts/-',
+          value: {
+            mountPath: '/var/run/webhook-service-tls',
+            name: 'webhook-service-tls',
+            readOnly: true,
+          },
+        },
+      ]),
       target: {
         kind: 'Deployment',
         name: 'control-api-controller',
@@ -337,22 +357,22 @@ local controllerDeploymentPatch = controllerDeploymentArgPatches
                                   + controllerDeploymentVolumeMountsPatch
                                   + controllerDeploymentVolumePatch;
 
-local controllerRoleBindingPatch = patches.LabelPatch('ClusterRoleBinding', 'control-api-controller', std.toString({
+local controllerRoleBindingPatch = patches.LabelPatch('ClusterRoleBinding', 'control-api-controller', {
   name: 'control-api-controller',
-}));
+});
 
 
-local controllerServicePatch = patches.LabelPatch('Service', 'control-api-controller-metrics', std.toString({
+local controllerServicePatch = patches.LabelPatch('Service', 'control-api-controller-metrics', {
   app: 'control-api-controller',
   name: 'control-api-controller',
-})) {
+}) {
   patches+: [
     {
-      patch: |||
-        - op: add
-          path: /spec/ports/0/name
-          value: metrics
-      |||,
+      patch: std.manifestJsonMinified([ {
+        op: 'add',
+        path: '/spec/ports/0/name',
+        value: 'metrics',
+      } ]),
       target: {
         kind: 'Service',
         name: 'control-api-controller-metrics',
@@ -364,9 +384,10 @@ local controllerServicePatch = patches.LabelPatch('Service', 'control-api-contro
 ////////////////
 // Misc
 
-local apiservicePatches = patches.ApiServicePatch('v1.organization.appuio.io', params.apiserver.apiservice.insecureSkipTLSVerify, params.apiserver.tls.serverCert)
-                          + patches.ApiServicePatch('v1.user.appuio.io', params.apiserver.apiservice.insecureSkipTLSVerify, params.apiserver.tls.serverCert)
-                          + patches.ApiServicePatch('v1.billing.appuio.io', params.apiserver.apiservice.insecureSkipTLSVerify, params.apiserver.tls.serverCert);
+local apiservicePatches =
+  patches.ApiServicePatch('v1.organization.appuio.io', params.apiserver.apiservice.insecureSkipTLSVerify, params.apiserver.tls.serverCert)
+  + patches.ApiServicePatch('v1.user.appuio.io', params.apiserver.apiservice.insecureSkipTLSVerify, params.apiserver.tls.serverCert)
+  + patches.ApiServicePatch('v1.billing.appuio.io', params.apiserver.apiservice.insecureSkipTLSVerify, params.apiserver.tls.serverCert);
 
 local kustomize_input = params.kustomize_input
                         + apiservicePatches

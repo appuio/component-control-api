@@ -5,7 +5,6 @@ metadata:
     app.kubernetes.io/managed-by: commodore
   name: v1.organization.appuio.io
 spec:
-  caBundle: null
   group: organization.appuio.io
   groupPriorityMinimum: 1000
   insecureSkipTLSVerify: true
