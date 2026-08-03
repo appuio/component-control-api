@@ -186,4 +186,4 @@ parameters:
       appuio-cloud-agent:
         registry: ghcr.io
         image: appuio/appuio-cloud-agent
-        tag: v0.20.2
+        tag: v0.21.0
